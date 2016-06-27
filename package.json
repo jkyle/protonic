@@ -2,7 +2,7 @@
   "name": "state-stream",
   "version": "0.1.3",
   "description": "A minimal framework for managing applicatoin state.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "babel spec/run.js",
     "build": "npm run build:main",

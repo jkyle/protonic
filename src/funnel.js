@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
-import StateStream from './stream';
+import Stream from './stream';
 
-export default class Funnel extends StateStream {
+export default class Funnel extends Stream {
   constructor (sourceMap) {
     super(Immutable.Map());
 

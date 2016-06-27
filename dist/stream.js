@@ -14,9 +14,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var StateStream = function () {
-  function StateStream(initial_state) {
-    _classCallCheck(this, StateStream);
+var Stream = function () {
+  function Stream(initial_state) {
+    _classCallCheck(this, Stream);
 
     if (initial_state && !_immutable2.default.Iterable.isIterable(initial_state)) {
       throw new TypeError('initial_state must be immutable');
@@ -27,7 +27,7 @@ var StateStream = function () {
     this.observers = _immutable2.default.List();
   }
 
-  _createClass(StateStream, [{
+  _createClass(Stream, [{
     key: 'subscribe',
     value: function subscribe(observer) {
       var _this = this;
@@ -74,7 +74,7 @@ var StateStream = function () {
     }
   }]);
 
-  return StateStream;
+  return Stream;
 }();
 
-exports.default = StateStream;
+exports.default = Stream;

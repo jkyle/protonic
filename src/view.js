@@ -1,6 +1,6 @@
-import StateStream from './stream';
+import Stream from './stream';
 
-export default class View extends StateStream {
+export default class View extends Stream {
   constructor (source, viewFn) {
     super();
 

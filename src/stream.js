@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-export default class StateStream {
+export default class Stream {
   constructor (initial_state) {
     if(initial_state && !Immutable.Iterable.isIterable(initial_state)) {
       throw new TypeError('initial_state must be immutable');
