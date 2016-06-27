@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import StateStream from './state-stream';
+import StateStream from './stream';
 
 export default class Funnel extends StateStream {
   constructor (sourceMap) {

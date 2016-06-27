@@ -12,9 +12,9 @@ var _immutable = require('immutable');
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _stateStream = require('./state-stream');
+var _stream = require('./stream');
 
-var _stateStream2 = _interopRequireDefault(_stateStream);
+var _stream2 = _interopRequireDefault(_stream);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -68,6 +68,6 @@ var Funnel = function (_StateStream) {
   }]);
 
   return Funnel;
-}(_stateStream2.default);
+}(_stream2.default);
 
 exports.default = Funnel;

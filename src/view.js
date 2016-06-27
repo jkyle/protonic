@@ -1,4 +1,4 @@
-import StateStream from './state-stream';
+import StateStream from './stream';
 
 export default class View extends StateStream {
   constructor (source, viewFn) {
