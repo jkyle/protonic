@@ -1,4 +1,4 @@
-module.exports.Stream = require('./dist/stream');
-module.exports.Stack = require('./dist/stack');
-module.exports.Funnel = require('./dist/funnel');
-module.exports.View = require('./dist/view');
+exports.Stream = require('./dist/stream').StateStream;
+exports.Stack = require('./dist/stack').Stack;
+exports.Funnel = require('./dist/funnel').Funnel;
+exports.View = require('./dist/view').View;
