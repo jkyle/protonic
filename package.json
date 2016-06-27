@@ -1,0 +1,22 @@
+{
+  "name": "state-stream",
+  "version": "0.1.0",
+  "description": "A minimal framework for managing applicatoin state.",
+  "main": "index.js",
+  "scripts": {
+    "test": "babel spec/run.js",
+    "build": "npm run build:main",
+    "build:main": "babel src --out-dir dist"
+  },
+  "author": "J. Kyle Fagan",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.9.1",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-watch": "^2.0.2",
+    "babel-cli": "^6.10.1"
+  },
+  "dependencies": {
+    "immutable": "^3.8.1"
+  }
+}
