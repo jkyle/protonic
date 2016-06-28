@@ -1,6 +1,15 @@
+
+/**
+ * @module view
+ */
 import Stream from './stream';
 
-export default class View extends Stream {
+/**
+ * A View is a kind of Stream the that caches particular a shape of state.
+ *
+ * @extends Stream
+ */
+class View extends Stream {
   constructor (source, viewFn) {
     super();
 
@@ -12,3 +21,5 @@ export default class View extends Stream {
     this.sourceSubscriber.unsubscribe();
   }
 }
+
+export default View;
