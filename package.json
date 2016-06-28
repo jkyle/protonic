@@ -1,5 +1,5 @@
 {
-  "name": "state-stream",
+  "name": "protonic",
   "version": "0.2.0",
   "description": "A minimal framework for managing applicatoin state.",
   "main": "dist/index.js",
