@@ -4,7 +4,12 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @module stack
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+/** Requires Immutable */
+
 
 var _immutable = require('immutable');
 
@@ -13,6 +18,11 @@ var _immutable2 = _interopRequireDefault(_immutable);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * A Stack isn't a stream, but can be used in conjunction with streams, actions, and
+ * transformers to make debugging much easier.
+ */
 
 var Stack = function () {
   function Stack() {
@@ -39,9 +49,9 @@ var Stack = function () {
     }
   }, {
     key: 'pushState',
-    value: function pushState(name, state) {
-      this.addToStack(_immutable2.default.Map({ type: 'STATE', name: name, state: state }));
-      if (this.debug && this.testFn && this.testFn(state)) {
+    value: function pushState(name, state, streamType) {
+      this.addToStack(_immutable2.default.Map({ type: 'STATE', name: name, state: state, streamType: streamType }));
+      if (this.testFn && this.testFn(state)) {
         this.dumpWhenCb(this.dump());
       }
     }
@@ -83,12 +93,12 @@ var Stack = function () {
         },
         STATE: function STATE(item) {
           var stateAccessor = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
-          return console.log('%cSTATE ' + '%c' + item.get('name') + '\n', 'font-weight: bold; color: #3B74C4', 'font-style: italic; color: #004', item.getIn(['state'].concat(stateAccessor)).toJS());
+          return console.log('%cSTATE ' + (item.streamType ? '(' + item.streamType + ')' : '') + '%c' + item.get('name') + '\n', 'font-weight: bold; color: #3B74C4', 'font-style: italic; color: #004', item.getIn(['state'].concat(stateAccessor)).toJS());
         }
       };
 
       if (this.debug) {
-        this.stack.map(function (item, index) {
+        this.stack.map(function (item) {
           if (item) {
             toLog[item.get('type')](item, stateAccessor);
           }

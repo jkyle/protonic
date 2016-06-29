@@ -25,6 +25,11 @@ class Stream {
     this.observers = Immutable.List();
   }
 
+
+  logStack (name, stack) {
+    this.name = name;
+    this.stack = stack;
+  }
   /**
    * subscribe - takes a callback function that is executed any time the stream received _new_
    * state. The callback should accept `state` as an argument. If the stream currently has state,
@@ -66,6 +71,7 @@ class Stream {
    */
   sendState (newState) {
       this._state = newState;
+      if (this.stack) { this.stack.pushState(this.name, this._state, this.type); }
       this.observers.forEach(observer => observer(this._state));
   }
 

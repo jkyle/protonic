@@ -25,8 +25,8 @@ class Stack {
     this.addToStack(Immutable.Map({type: 'ACTION', name: fn, args: args}));
   }
 
-  pushState (name, state) {
-    this.addToStack(Immutable.Map({ type: 'STATE', name , state }));
+  pushState (name, state, streamType) {
+    this.addToStack(Immutable.Map({ type: 'STATE', name , state, streamType }));
     if (this.testFn && this.testFn(state)) {
       this.dumpWhenCb(this.dump());
     }
@@ -58,13 +58,13 @@ class Stack {
       TRANSFORMER: item => console.log('%cTRANSFORMER ' + '%c' + item.get('name') + '\n',
                                        'font-weight: bold; color: #D08A10', 'font-style: italic; color: #004',
                                        item.get('args')),
-      STATE: (item, stateAccessor = []) => console.log('%cSTATE ' + '%c' + item.get('name') + '\n',
+      STATE: (item, stateAccessor = []) => console.log('%cSTATE ' + (item.streamType ? '(' + item.streamType + ')' : '') + '%c' + item.get('name') + '\n',
                                             'font-weight: bold; color: #3B74C4', 'font-style: italic; color: #004',
                                             item.getIn(['state'].concat(stateAccessor)).toJS())
-    }
+    };
 
     if (this.debug) {
-      this.stack.map((item, index) => {
+      this.stack.map(item => {
         if(item){
           toLog[item.get('type')](item, stateAccessor);
         }
