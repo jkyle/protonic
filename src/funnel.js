@@ -26,9 +26,9 @@ class Funnel extends Stream {
 
     this.primed = false;
     this.sourceKeys = sourceMap.keySeq();
-    this.subscribers = sourceMap.map((value, key) => {
-      return value.subscribe(valState => {
-        this.state = this.state.set(key, valState);
+    this.subscribers = sourceMap.map((sourceStream, key) => {
+      return sourceStream.subscribe(newState => {
+        this.state = this.state.set(key, newState);
       });
     });
   }

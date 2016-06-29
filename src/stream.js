@@ -22,7 +22,6 @@ class Stream {
     }
 
     this._state = initialState;
-    this.views = Immutable.Map();
     this.observers = Immutable.List();
   }
 
