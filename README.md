@@ -200,7 +200,7 @@ let currentState = AppStream.state;
 //   Ship: { type: 'X-Wing' } }
 ```
 
-Also like Streams, you can subscribe to state changes with the `.subscribe` method.
+Also like Streams, you can subscribe to state changes with the `.subscribe` method. Note that state will not be sent to observers until all of the source streams have emitted state to the funnel.
 
 ```javascript
 let subscriber = AppStream.subscribe(state => console.log(state));
@@ -239,7 +239,7 @@ let currentState = myView.state;
 // currentState is Immutable.Map of { description: 'Testor flies an X-Wing' }
 ```
 
-Also like Streams and Funnels, you can subscribe to state changes from the view.
+Also like Streams and Funnels, you can subscribe to state changes from the view. Just like Streams, observers will only receive state if the new state calculated by the View is distinct from the last state calculated by the View.
 
 ```javascript
 let subscriber = myView.subscribe(state => console.log(state));

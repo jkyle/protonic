@@ -5,11 +5,10 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "babel spec/run.js",
-    "build": "npm run build:main",
-    "build:main": "babel src --out-dir dist",
+    "build": "babel src --out-dir dist",
     "docs": "jsdoc src -d docs"
   },
-  "author": "J. Kyle Fagan",
+  "author": "J. Kyle Fagan <jkyle@causethought.com>",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.10.1",
