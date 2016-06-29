@@ -9,6 +9,11 @@
     "docs": "jsdoc src -d docs"
   },
   "author": "J. Kyle Fagan <jkyle@causethought.com>",
+  "homepage": "https://github.com/jkyle/protonic",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/jkyle/protonic.git"
+  },
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.10.1",
