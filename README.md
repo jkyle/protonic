@@ -4,7 +4,7 @@ _It's like other things, only different._
 
 ## Overview
 
-Protonic is a (very) simple (framework agnostic) library for managing state through streams. By itself, Protonic isn't much of a framework, but _is_ designed to work with a simple one-way data flow pattern that we'll describe here.
+Protonic is a (very) simple (framework agnostic) library for managing state through streams. By itself, Protonic isn't much of a framework, but _is_ designed to work with a simple one-way data flow pattern that we'll describe here. (This pattern isn't anything new, but for the sake of this document and this particular flavor of the pattern we'll call it the Protonic Pattern.)
 
 ## One-Way Data Flow
 
@@ -17,6 +17,7 @@ A **Stream** is a canonical source of state for a part of an application. Observ
 2. Streams won't emit a new state if it's content is the same as the current state of the stream.
 3. Streams don't "complete".
 4. Streams make their internal state available without needing to subscribe to the stream.
+5. Streams only work with immutable data.
 
 #### Transformers
 A **transformer** is a function that gets the current state of a stream, transforms the state into new state, and sends the new state back to the stream.
