@@ -91,9 +91,6 @@ Since streams only emit new state to observers when the new state is distinct fr
 Since the Protonic Pattern is framework agnostic, the specific implementation details will be determined by whichever framework is rendering your interface. (It's also important to note that the pattern isn't limited to an interface being a *UI* interface.)
 
 
-#### **TODO** Data Flow Diagrams
-
-
 #### Example components
 We'll demonstrate an oversimplified example of components in both Angular (1.5, but the concept applies as well to 2.0) and React. In both cases, we'll assume that a stream called `AppStream` will send the following state:
 
