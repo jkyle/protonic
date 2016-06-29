@@ -1,7 +1,7 @@
 {
   "name": "protonic",
   "version": "0.2.2",
-  "description": "A minimal framework for managing applicatoin state.",
+  "description": "A minimal library for managing application state.",
   "main": "dist/index.js",
   "scripts": {
     "test": "babel spec/run.js",
