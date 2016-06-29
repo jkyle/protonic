@@ -1,6 +1,6 @@
 {
   "name": "protonic",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A minimal framework for managing applicatoin state.",
   "main": "dist/index.js",
   "scripts": {
