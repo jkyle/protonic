@@ -1,0 +1,24 @@
+<h2 id="one-way-data-flow">One-Way Data Flow</h2>
+<p><img src="./diagrams/all-diagram.png" alt="Diagram of whole system"></p>
+<h3 id="terminology">Terminology</h3>
+<h4 id="state">State</h4>
+<p><strong>State</strong> is an <code>Immutable</code> data structure that represents the data needed to render your application. This includes the state of the UI in addition to data that might be retrieved from a database or server.</p>
+<h4 id="streams">Streams</h4>
+<p>A <strong>Stream</strong> is a canonical source of <strong>state</strong> for a part of an application. Observers can subscribe to a stream to receive new state when the stream updates. Streams in Protonic are similar to streams in other frameworks (they are actually very similar to BehaviorSubjects in RxJS), but make certain assumptions to simplify things.</p>
+<ol>
+<li>Streams remember the last state emitted.</li>
+<li>Streams won’t emit falsey values.</li>
+<li>Streams won’t emit a new state if it’s content is the same as the current state of the stream.</li>
+<li>Streams don’t “complete”.</li>
+<li>Streams make their internal state available without needing to subscribe to the stream.</li>
+<li>Streams only work with immutable data.</li>
+</ol>
+<p><img src="./diagrams/stream-diagram.png" alt="Diagram of Streams"></p>
+<h4 id="transformers">Transformers</h4>
+<p>A <strong>transformer</strong> is a function that gets the current state of a stream, transforms the state into new state, and sends the new state back to the stream.</p>
+<p>A transformer is <em>only</em> allowed to operate on state from one stream. It may not affect state outside of itself. Additionally, <em>Only</em> transformers are allowed to change the state of stream.</p>
+<p><img src="./diagrams/transformer-diagram.png" alt="Diagram of Transformers"></p>
+<h4 id="actions">Actions</h4>
+<p>Since transformers are each allowed to only transform state from one stream, and are not allowed to have side-effects, <strong>actions</strong> are what we use to combine state changes across streams, as well as perform side-effects (such as Ajax request to fetch data from a server).</p>
+<p>Actions are allowed to call transformers for different streams, but actions may not manipulate streams directly. Since transformers are not technically reducers (they don’t receive state as an argument or return state), they cannot be batched together in on atomic state change. This means that a transform of state from one stream should not depend on a transform of state from another stream happening in a particular order.</p>
+<p><img src="./diagrams/action-diagram.png" alt="Diagram of Actions"></p>

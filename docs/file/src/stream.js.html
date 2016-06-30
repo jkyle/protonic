@@ -1,5 +1,48 @@
-/** Requires Immutable */
-import Immutable from 'immutable';
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/stream.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/jkyle/protonic.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/funnel.js~Funnel.html">Funnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stack.js~Stack.html">Stack</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stream.js~Stream.html">Stream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/view.js~View.html">View</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/stream.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** Requires Immutable */
+import Immutable from &apos;immutable&apos;;
 
 /**
  * A Stream holds the canonical state of a part of an application, and pushes changes to that state
@@ -16,8 +59,8 @@ class Stream {
    * @return {Stream} Instance of a Stream.
    */
   constructor (initialState) {
-    if(initialState && !Immutable.Iterable.isIterable(initialState)) {
-      throw new TypeError('initialState must be immutable');
+    if(initialState &amp;&amp; !Immutable.Iterable.isIterable(initialState)) {
+      throw new TypeError(&apos;initialState must be immutable&apos;);
     }
 
     this._state = initialState;
@@ -37,7 +80,7 @@ class Stream {
    * An observer gets added to an `observers` array. State changes will propagate to any observers
    * in this array.
    *
-   * It will return an object (we'll call a _subscriber_) that has an `unsubscribe` method. This
+   * It will return an object (we&apos;ll call a _subscriber_) that has an `unsubscribe` method. This
    * method will remove the observer from the `observers` List and should be called anytime the
    * observer is done listening to the stream. Failing to do so could cause memory leaks.
    *
@@ -49,12 +92,12 @@ class Stream {
     this.observers = this.observers.push(observer);
     if(this._state) { observer(this._state); }
     return {
-      unsubscribe: () => {
+      unsubscribe: () =&gt; {
         const idx = this.observers.indexOf(observer);
-        if (idx >= 0) {
+        if (idx &gt;= 0) {
           this.observers = this.observers.delete(this.observers.indexOf(observer));
         } else {
-          throw new RangeError('Observer is not subscribed to this stream.');
+          throw new RangeError(&apos;Observer is not subscribed to this stream.&apos;);
         }
       }
     };
@@ -66,17 +109,17 @@ class Stream {
    * with the new state as its argument.
    *
    * @access private
-   * @param  {Immutable} newState the Stream's new state.
+   * @param  {Immutable} newState the Stream&apos;s new state.
    */
   sendState (newState) {
       this._state = newState;
       if (this.stack) { this.stack.pushState(this.name, this._state, this.type); }
-      this.observers.forEach(observer => observer(this._state));
+      this.observers.forEach(observer =&gt; observer(this._state));
   }
 
   /**
    * next - Receives new state (externally, ideally through a transformer) and verifies that the
-   * new state is different from the Stream's current state before passing on to `sendState` (and,
+   * new state is different from the Stream&apos;s current state before passing on to `sendState` (and,
    * all the observers, by extension).
    *
    * @access public
@@ -99,7 +142,7 @@ class Stream {
   }
 
   /**
-   * set state - a setter that's probably more clever than it needs to be. Instead of setting
+   * set state - a setter that&apos;s probably more clever than it needs to be. Instead of setting
    * the internal state, it calls `next`.
    *
    * ```javascript
@@ -121,3 +164,20 @@ class Stream {
 }
 
 export default Stream;
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

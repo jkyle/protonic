@@ -1,7 +1,3 @@
-/**
- * @module stack
- */
-
 /** Requires Immutable */
 import Immutable from 'immutable';
 

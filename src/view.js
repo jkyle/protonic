@@ -1,7 +1,3 @@
-
-/**
- * @module view
- */
 import Stream from './stream';
 
 /**

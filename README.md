@@ -37,152 +37,54 @@ myStream.state = myStream.state.set('name', 'Karé Kun');
 // nothing logs.
 ```
 
-## One-Way Data Flow
+## Manual
+(Overview)[https://github.com/jkyle/protonic/tree/master/manual/1-overview.md]
+(Getting Started)[https://github.com/jkyle/protonic/tree/master/manual/2-getting-started.md]
+(One-Way Data Flow)[https://github.com/jkyle/protonic/tree/master/manual/3-data-flow.md]
+(Example Components in Angular and React)[https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md]
+(Other Streams: Funnels and Views)[https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md]
+(Source Documentation)[https://jkyle.github.io/protonic]
 
-![Diagram of whole system](./diagrams/all-diagram.png)
+## Actions and Transformers
 
-### Terminology
-
-
-#### State
-**State** is an `Immutable` data structure that represents the data needed to render your application. This includes the state of the UI in addition to data that might be retrieved from a database or server.
-
-
-#### Streams
-A **Stream** is a canonical source of **state** for a part of an application. Observers can subscribe to a stream to receive new state when the stream updates. Streams in Protonic are similar to streams in other frameworks (they are actually very similar to BehaviorSubjects in RxJS), but make certain assumptions to simplify things.
-
-1. Streams remember the last state emitted.
-2. Streams won't emit falsey values.
-3. Streams won't emit a new state if it's content is the same as the current state of the stream.
-4. Streams don't "complete".
-5. Streams make their internal state available without needing to subscribe to the stream.
-6. Streams only work with immutable data.
-
-![Diagram of Streams](./diagrams/stream-diagram.png)
-
-#### Transformers
-A **transformer** is a function that gets the current state of a stream, transforms the state into new state, and sends the new state back to the stream.
-
-A transformer is *only* allowed to operate on state from one stream. It may not affect state outside of itself. Additionally, *Only* transformers are allowed to change the state of stream.
-
-![Diagram of Transformers](./diagrams/transformer-diagram.png)
-
-
-#### Actions
-Since transformers are each allowed to only transform state from one stream, and are not allowed to have side-effects, **actions** are what we use to combine state changes across streams, as well as perform side-effects (such as Ajax request to fetch data from a server).
-
-Actions are allowed to call transformers for different streams, but actions may not manipulate streams directly. Since transformers are not technically reducers (they don't receive state as an argument or return state), they cannot be batched together in on atomic state change. This means that a transform of state from one stream should not depend on a transform of state from another stream happening in a particular order.
-
-![Diagram of Actions](./diagrams/action-diagram.png)
-
-#### Funnels
-A **Funnel** is just a special kind of stream that takes *other* streams as its input. The funnel will combine the state from the other streams into a new state object. The Protonic Pattern is a big believer that there should only be one source of state for UI components to subscribe to. Typically an AppState will be created by **Funnel**-ing the individual source streams into one state object.
-
-Funnels initialize with an empty `Immutable.Map` as its value, but won't emit state to observers until *all* of the source streams have sent state to the Funnel.
-
-
-#### Views
-A **View** is another special kind of stream that takes a single stream as input along with a function that computes new state from the state of the source stream.
-
-Since streams only emit new state to observers when the new state is distinct from the current state, views will only emit when the computed state changes. This is a good way to prevent a lot of unnecessary calls to observers when the application state changes.
-
-
-### Wiring Up UI Components
-Since the Protonic Pattern is framework agnostic, the specific implementation details will be determined by whichever framework is rendering your interface. (It's also important to note that the pattern isn't limited to an interface being a *UI* interface.)
-
-
-#### Example components
-We'll demonstrate an oversimplified example of components in both Angular (1.5, but the concept applies as well to 2.0) and React. In both cases, we'll assume that a stream called `AppStream` will send the following state:
+### Transformers
+Transformers are solely responsible for manipulating state for a stream. They are not pure reducers, however. Transformers don't take state as an input. Rather, they fetch the current state from the stream directly. They also do not return new state. Rather, they send the new state back to the stream. Regardless, transformers should still follow the same rules as pure reducers, specifically that they do not depend on state outside of the stream, and that they do not alter state outside of the stream.
 
 ```javascript
-Immutable.Map({
-  id: 3,
-  name: 'Jessika Pava',
-  callsign: 'Blue Three',
-  fighter: 'T-70 X-Wing',
-  affiliation: 'Resistance',
-  sorties: 18
-})
-```
-
-
-#### Angular 1.5
-
-*In an effort to reduce complexity, we aren't using Angular's Dependency Injection here. If you need DI, you can create a service as a wrapper around the stream. Additionally, changes in state won't automatically trigger a digest cycle. An example of how to do with will be provided later on.*
-
-```javascript
-
-import AppStream from 'path/to/app-stream';
-import { incrementPilotSortie } from 'path/to/actions';
-
-export default {
-  template: '... some template ...',
-  bindings: {},
-  controller: function(){
-    let subscriber;
-    // Initial state.
-    this.pilot = {
-      name: '',
-      callsign: ''
-      fighter: '',
-      affiliation: '',
-      sorties: 0
-    };
-
-    // Lifecycle methods.
-    // $onInit sets up the state subscriber.
-    this.$onInit = function () {
-      subscriber = AppStream.subscribe(state => this.pilot = state.toJS())
-    }
-
-    // $onDestroy cleans up the subscriber
-    this.$onDestroy = () => {
-      subscriber.unsubscribe()
-    }
-
-    // A method to be called from the UI
-    // which in turn calls an action.
-    this.incrementSortie = () => {
-      incrementPilotSortie(this.pilot.id);
-    }
-  }
+// A typical transformer
+function incrementPilotSortie(amount) {
+  let currentState = stream.state; // state is an Immutable data structure.
+  let sorties = currentState.get('sorties');
+  let newSorties = sorties + amount;
+  let newState = currentState.set('sorties', newSorties);
+  stream.next(newState);
 }
-
+```
+This can be simplified to:
+```javascript
+// A typical transformer
+function incrementPilotSortie(amount) {
+  stream.state = stream.state.update('sorties', num => num + amount);
+}
 ```
 
-
-#### React
+### Actions
+Most of the time, when a user triggers an action, we would expect state in multiple streams to be update. An example would be a section of the UI updating to show a progress bar or spinner when data is fetched from the server. Since transformers are prohibited from affecting state from outside their stream, actions are our way of combining transformers and necessary side-effects (ajax calls, for example).
 
 ```javascript
-import AppStream from 'path/to/app-stream';
-import { incrementPilotSortie } from 'path/to/actions';
-
-export default React.createClass({
-  getInitialState: function() {
-    return { pilot:{
-              name: '',
-              callsign: ''
-              fighter: '',
-              affiliation: '',
-              sorties: 0
-            }
-          }
-  },
-  componentDidMount: function() {
-    this.subscriber = AppStream.subscribe(state => this.setState({ pilot: state.toJS() }));
-  },
-  componentWillUnmount: function() {
-    this.subscriber.unsubscribe();
-  },
-  incrementSortie: function() {
-    incrementPilotSortie(this.state.pilot.id);
-  },
-  render: function() {
-    return ( /*... some jsx  ... */ );
-  }
-})
+function getPilots () {
+  uiTransformers.setSpinner(true);
+  $get('api/to/pilots')
+    .then(result => {
+      pilotTransformers.updatePilots(result);
+      uiTransformers.setSpinner(false);
+    },
+    error => {
+      uiTransformers.setSpinner(false);
+      uiTransformers.setError(error);
+    });
+}
 ```
-
 
 ## API
 
@@ -306,49 +208,6 @@ And, like Funnels, when you are done with a View, it can be cleaned up with the 
 ```javascript
 myView.destroy();
 ```
-
-
-## Actions and Transformers
-
-### Transformers
-As mentioned above, transformers are solely responsible for manipulating state for a stream. They are not pure reducers, however. Transformers don't take state as an input. Rather, they fetch the current state from the stream directly. They also do not return new state. Rather, they send the new state back to the stream. Regardless, transformers should still follow the same rules as pure reducers, specifically that they do not depend on state outside of the stream, and that they do not alter state outside of the stream.
-
-```javascript
-// A typical transformer
-function incrementPilotSortie(amount) {
-  let currentState = stream.state; // state is an Immutable data structure.
-  let sorties = currentState.get('sorties');
-  let newSorties = sorties + amount;
-  let newState = currentState.set('sorties', newSorties);
-  stream.next(newState);
-}
-```
-This can be simplified to:
-```javascript
-// A typical transformer
-function incrementPilotSortie(amount) {
-  stream.state = stream.state.update('sorties', num => num + amount);
-}
-```
-
-### Actions
-Most of the time, when a user triggers an action, we would expect state in multiple streams to be update. An example would be a section of the UI updating to show a progress bar or spinner when data is fetched from the server. Since transformers are prohibited from affecting state from outside their stream, actions are our way of combining transformers and necessary side-effects (ajax calls, for example).
-
-```javascript
-function getPilots () {
-  uiTransformers.setSpinner(true);
-  $get('api/to/pilots')
-    .then(result => {
-      pilotTransformers.updatePilots(result);
-      uiTransformers.setSpinner(false);
-    },
-    error => {
-      uiTransformers.setSpinner(false);
-      uiTransformers.setError(error);
-    });
-}
-```
-
 
 ## Logging and Debugging
 **TODO** Talk about Logging/Debugging with Stacks.

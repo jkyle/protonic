@@ -1,6 +1,3 @@
-/**
- * @module funnel
- */
 import Immutable from 'immutable';
 import Stream from './stream';
 
