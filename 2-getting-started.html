@@ -1,0 +1,25 @@
+<h2 id="getting-started-quickly-">Getting Started (Quickly)</h2>
+<p>To use Protonic in your app, install it with npm:</p>
+<p><code>npm install protonic --save</code></p>
+<pre><code class="lang-javascript">import Immutable from &#39;immutable&#39;;
+import { Stream } from &#39;protonic&#39;;
+
+// To create a stream:
+let initialState = Immutable.Map({ name: &#39;Jessika Pava&#39; })
+let myStream = new Stream(initialState);
+
+
+// To subscribe to a stream:
+let subscriber = myStream.subscribe(state =&gt; console.log(state.get(&#39;name&#39;)));
+// immediately logs &quot;Jessika Pava&quot;
+
+// To send state to a stream:
+myStream.state = myStream.state.set(&#39;name&#39;, &#39;&quot;Snap&quot; Wexley&#39;);
+// logs &#39;&quot;Snap&quot; Wexley&#39;
+
+// To unsubscribe from a stream:
+subscriber.unsubscribe();
+
+myStream.state = myStream.state.set(&#39;name&#39;, &#39;Karé Kun&#39;);
+// nothing logs.
+</code></pre>

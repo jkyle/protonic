@@ -1,351 +1,213 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Protonic by jkyle</title>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl">
+  <title data-ice="title">API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
-    <meta name="viewport" content="width=device-width">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Protonic</h1>
-        <p>A small library for managing application state with streams.</p>
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/jkyle/protonic.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
 
-        <p class="view"><a href="https://github.com/jkyle/protonic">View the Project on GitHub <small>jkyle/protonic</small></a></p>
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/funnel.js~Funnel.html">Funnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stack.js~Stack.html">Stack</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stream.js~Stream.html">Stream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/view.js~View.html">View</a></span></span></li>
+</ul>
+</div>
+</nav>
 
-
-        <ul>
-          <li><a href="https://github.com/jkyle/protonic/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/jkyle/protonic/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/jkyle/protonic">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a id="protonic" class="anchor" href="#protonic" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PROTONIC</h1>
-
-<p><em>It's like other things, only different.</em></p>
-
-<h2>
-<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Overview</h2>
-
-<p>Protonic is a (very) simple (framework agnostic) library for managing state through streams. It's inspired by other popular state-management patterns and libraries (notably Redux, Flux, and RxJS), but makes certain assumptions and trade-offs in support of reducing complexity and developing applications following a specific pattern. By itself, Protonic isn't much of a framework, but <em>is</em> designed to work with a simple one-way data flow pattern that we'll describe here. (This pattern isn't anything new, but for the sake of this document and this particular flavor of the pattern we'll call it the Protonic Pattern.)</p>
-
-<h2>
-<a id="getting-started-quickly" class="anchor" href="#getting-started-quickly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Started (Quickly)</h2>
-
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="protonic">PROTONIC</h1>
+<p><em>It&apos;s like other things, only different.</em></p>
+<h2 id="overview">Overview</h2>
+<p>Protonic is a (very) simple (framework agnostic) library for managing state through streams. It&apos;s inspired by other popular state-management patterns and libraries (notably Redux, Flux, and RxJS), but makes certain assumptions and trade-offs in support of reducing complexity and developing applications following a specific pattern. By itself, Protonic isn&apos;t much of a framework, but <em>is</em> designed to work with a simple one-way data flow pattern that we&apos;ll describe here. (This pattern isn&apos;t anything new, but for the sake of this document and this particular flavor of the pattern we&apos;ll call it the Protonic Pattern.)</p>
+<h2 id="getting-started-quickly-">Getting Started (Quickly)</h2>
 <p>To use Protonic in your app, install it with npm:</p>
-
 <p><code>npm install protonic --save</code></p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import Immutable from &apos;immutable&apos;;
+import { Stream } from &apos;protonic&apos;;
 
-<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-smi">Immutable</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>immutable<span class="pl-pds">'</span></span>;
-<span class="pl-k">import</span> { <span class="pl-smi">Stream</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>protonic<span class="pl-pds">'</span></span>;
-
-<span class="pl-c">// To create a stream:</span>
-<span class="pl-k">let</span> initialState <span class="pl-k">=</span> <span class="pl-smi">Immutable</span>.<span class="pl-en">Map</span>({ name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Jessika Pava<span class="pl-pds">'</span></span> })
-<span class="pl-k">let</span> myStream <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Stream</span>(initialState);
+// To create a stream:
+let initialState = Immutable.Map({ name: &apos;Jessika Pava&apos; })
+let myStream = new Stream(initialState);
 
 
-<span class="pl-c">// To subscribe to a stream:</span>
-<span class="pl-k">let</span> subscriber <span class="pl-k">=</span> <span class="pl-smi">myStream</span>.<span class="pl-en">subscribe</span>(<span class="pl-smi">state</span> <span class="pl-k">=&gt;</span> <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-smi">state</span>.<span class="pl-en">get</span>(<span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>)));
-<span class="pl-c">// immediately logs "Jessika Pava"</span>
+// To subscribe to a stream:
+let subscriber = myStream.subscribe(state =&gt; console.log(state.get(&apos;name&apos;)));
+// immediately logs &quot;Jessika Pava&quot;
 
-<span class="pl-c">// To send state to a stream:</span>
-<span class="pl-smi">myStream</span>.<span class="pl-smi">state</span> <span class="pl-k">=</span> <span class="pl-smi">myStream</span>.<span class="pl-smi">state</span>.<span class="pl-en">set</span>(<span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>"Snap" Wexley<span class="pl-pds">'</span></span>);
-<span class="pl-c">// logs '"Snap" Wexley'</span>
+// To send state to a stream:
+myStream.state = myStream.state.set(&apos;name&apos;, &apos;&quot;Snap&quot; Wexley&apos;);
+// logs &apos;&quot;Snap&quot; Wexley&apos;
 
-<span class="pl-c">// To unsubscribe from a stream:</span>
-<span class="pl-smi">subscriber</span>.<span class="pl-en">unsubscribe</span>();
+// To unsubscribe from a stream:
+subscriber.unsubscribe();
 
-<span class="pl-smi">myStream</span>.<span class="pl-smi">state</span> <span class="pl-k">=</span> <span class="pl-smi">myStream</span>.<span class="pl-smi">state</span>.<span class="pl-en">set</span>(<span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Karé Kun<span class="pl-pds">'</span></span>);
-<span class="pl-c">// nothing logs.</span></pre></div>
-
-<h2>
-<a id="one-way-data-flow" class="anchor" href="#one-way-data-flow" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>One-Way Data Flow</h2>
-
-<p><img src="./diagrams/all-diagram.png" alt="Diagram of whole system"></p>
-
-<h3>
-<a id="terminology" class="anchor" href="#terminology" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Terminology</h3>
-
-<h4>
-<a id="state" class="anchor" href="#state" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>State</h4>
-
-<p><strong>State</strong> is an <code>Immutable</code> data structure that represents the data needed to render your application. This includes the state of the UI in addition to data that might be retrieved from a database or server.</p>
-
-<h4>
-<a id="streams" class="anchor" href="#streams" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Streams</h4>
-
-<p>A <strong>Stream</strong> is a canonical source of <strong>state</strong> for a part of an application. Observers can subscribe to a stream to receive new state when the stream updates. Streams in Protonic are similar to streams in other frameworks (they are actually very similar to BehaviorSubjects in RxJS), but make certain assumptions to simplify things.</p>
-
-<ol>
-<li>Streams remember the last state emitted.</li>
-<li>Streams won't emit falsey values.</li>
-<li>Streams won't emit a new state if it's content is the same as the current state of the stream.</li>
-<li>Streams don't "complete".</li>
-<li>Streams make their internal state available without needing to subscribe to the stream.</li>
-<li>Streams only work with immutable data.</li>
-</ol>
-
-<p><img src="./diagrams/stream-diagram.png" alt="Diagram of Streams"></p>
-
-<h4>
-<a id="transformers" class="anchor" href="#transformers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Transformers</h4>
-
-<p>A <strong>transformer</strong> is a function that gets the current state of a stream, transforms the state into new state, and sends the new state back to the stream.</p>
-
-<p>A transformer is <em>only</em> allowed to operate on state from one stream. It may not affect state outside of itself. Additionally, <em>Only</em> transformers are allowed to change the state of stream.</p>
-
-<p><img src="./diagrams/transformer-diagram.png" alt="Diagram of Transformers"></p>
-
-<h4>
-<a id="actions" class="anchor" href="#actions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Actions</h4>
-
-<p>Since transformers are each allowed to only transform state from one stream, and are not allowed to have side-effects, <strong>actions</strong> are what we use to combine state changes across streams, as well as perform side-effects (such as Ajax request to fetch data from a server).</p>
-
-<p>Actions are allowed to call transformers for different streams, but actions may not manipulate streams directly. Since transformers are not technically reducers (they don't receive state as an argument or return state), they cannot be batched together in on atomic state change. This means that a transform of state from one stream should not depend on a transform of state from another stream happening in a particular order.</p>
-
-<p><img src="./diagrams/action-diagram.png" alt="Diagram of Actions"></p>
-
-<h4>
-<a id="funnels" class="anchor" href="#funnels" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Funnels</h4>
-
-<p>A <strong>Funnel</strong> is just a special kind of stream that takes <em>other</em> streams as its input. The funnel will combine the state from the other streams into a new state object. The Protonic Pattern is a big believer that there should only be one source of state for UI components to subscribe to. Typically an AppState will be created by <strong>Funnel</strong>-ing the individual source streams into one state object.</p>
-
-<p>Funnels initialize with an empty <code>Immutable.Map</code> as its value, but won't emit state to observers until <em>all</em> of the source streams have sent state to the Funnel.</p>
-
-<h4>
-<a id="views" class="anchor" href="#views" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Views</h4>
-
-<p>A <strong>View</strong> is another special kind of stream that takes a single stream as input along with a function that computes new state from the state of the source stream.</p>
-
-<p>Since streams only emit new state to observers when the new state is distinct from the current state, views will only emit when the computed state changes. This is a good way to prevent a lot of unnecessary calls to observers when the application state changes.</p>
-
-<h3>
-<a id="wiring-up-ui-components" class="anchor" href="#wiring-up-ui-components" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Wiring Up UI Components</h3>
-
-<p>Since the Protonic Pattern is framework agnostic, the specific implementation details will be determined by whichever framework is rendering your interface. (It's also important to note that the pattern isn't limited to an interface being a <em>UI</em> interface.)</p>
-
-<h4>
-<a id="example-components" class="anchor" href="#example-components" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example components</h4>
-
-<p>We'll demonstrate an oversimplified example of components in both Angular (1.5, but the concept applies as well to 2.0) and React. In both cases, we'll assume that a stream called <code>AppStream</code> will send the following state:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">Immutable</span>.<span class="pl-en">Map</span>({
-  id<span class="pl-k">:</span> <span class="pl-c1">3</span>,
-  name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Jessika Pava<span class="pl-pds">'</span></span>,
-  callsign<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Blue Three<span class="pl-pds">'</span></span>,
-  fighter<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>T-70 X-Wing<span class="pl-pds">'</span></span>,
-  affiliation<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Resistance<span class="pl-pds">'</span></span>,
-  sorties<span class="pl-k">:</span> <span class="pl-c1">18</span>
-})</pre></div>
-
-<h4>
-<a id="angular-15" class="anchor" href="#angular-15" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Angular 1.5</h4>
-
-<p><em>In an effort to reduce complexity, we aren't using Angular's Dependency Injection here. If you need DI, you can create a service as a wrapper around the stream. Additionally, changes in state won't automatically trigger a digest cycle. An example of how to do with will be provided later on.</em></p>
-
-<div class="highlight highlight-source-js"><pre>
-<span class="pl-k">import</span> <span class="pl-smi">AppStream</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>path/to/app-stream<span class="pl-pds">'</span></span>;
-<span class="pl-k">import</span> { <span class="pl-smi">incrementPilotSortie</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>path/to/actions<span class="pl-pds">'</span></span>;
-
-<span class="pl-k">export</span> <span class="pl-v">default</span> {
-  template<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>... some template ...<span class="pl-pds">'</span></span>,
-  bindings<span class="pl-k">:</span> {},
-  <span class="pl-en">controller</span><span class="pl-k">:</span> <span class="pl-k">function</span>(){
-    <span class="pl-k">let</span> subscriber;
-    <span class="pl-c">// Initial state.</span>
-    <span class="pl-v">this</span>.<span class="pl-smi">pilot</span> <span class="pl-k">=</span> {
-      name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>,
-      callsign<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>
-      fighter<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>,
-      affiliation<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>,
-      sorties<span class="pl-k">:</span> <span class="pl-c1">0</span>
-    };
-
-    <span class="pl-c">// Lifecycle methods.</span>
-    <span class="pl-c">// $onInit sets up the state subscriber.</span>
-    <span class="pl-v">this</span>.<span class="pl-en">$onInit</span> <span class="pl-k">=</span> <span class="pl-k">function</span> () {
-      subscriber <span class="pl-k">=</span> <span class="pl-smi">AppStream</span>.<span class="pl-en">subscribe</span>(<span class="pl-smi">state</span> <span class="pl-k">=&gt;</span> <span class="pl-v">this</span>.<span class="pl-smi">pilot</span> <span class="pl-k">=</span> <span class="pl-smi">state</span>.<span class="pl-en">toJS</span>())
-    }
-
-    <span class="pl-c">// $onDestroy cleans up the subscriber</span>
-    <span class="pl-v">this</span>.<span class="pl-en">$onDestroy</span> <span class="pl-k">=</span> () <span class="pl-k">=&gt;</span> {
-      <span class="pl-smi">subscriber</span>.<span class="pl-en">unsubscribe</span>()
-    }
-
-    <span class="pl-c">// A method to be called from the UI</span>
-    <span class="pl-c">// which in turn calls an action.</span>
-    <span class="pl-v">this</span>.<span class="pl-en">incrementSortie</span> <span class="pl-k">=</span> () <span class="pl-k">=&gt;</span> {
-      <span class="pl-en">incrementPilotSortie</span>(<span class="pl-v">this</span>.<span class="pl-smi">pilot</span>.<span class="pl-c1">id</span>);
-    }
-  }
-}
-</pre></div>
-
-<h4>
-<a id="react" class="anchor" href="#react" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>React</h4>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-smi">AppStream</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>path/to/app-stream<span class="pl-pds">'</span></span>;
-<span class="pl-k">import</span> { <span class="pl-smi">incrementPilotSortie</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>path/to/actions<span class="pl-pds">'</span></span>;
-
-<span class="pl-k">export</span> <span class="pl-v">default</span> <span class="pl-smi">React</span>.<span class="pl-en">createClass</span>({
-  <span class="pl-en">getInitialState</span><span class="pl-k">:</span> <span class="pl-k">function</span>() {
-    <span class="pl-k">return</span> { pilot<span class="pl-k">:</span>{
-              name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>,
-              callsign<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>
-              fighter<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>,
-              affiliation<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>,
-              sorties<span class="pl-k">:</span> <span class="pl-c1">0</span>
-            }
-          }
-  },
-  <span class="pl-en">componentDidMount</span><span class="pl-k">:</span> <span class="pl-k">function</span>() {
-    <span class="pl-v">this</span>.<span class="pl-smi">subscriber</span> <span class="pl-k">=</span> <span class="pl-smi">AppStream</span>.<span class="pl-en">subscribe</span>(<span class="pl-smi">state</span> <span class="pl-k">=&gt;</span> <span class="pl-v">this</span>.<span class="pl-en">setState</span>({ pilot<span class="pl-k">:</span> <span class="pl-smi">state</span>.<span class="pl-en">toJS</span>() }));
-  },
-  <span class="pl-en">componentWillUnmount</span><span class="pl-k">:</span> <span class="pl-k">function</span>() {
-    <span class="pl-v">this</span>.<span class="pl-smi">subscriber</span>.<span class="pl-en">unsubscribe</span>();
-  },
-  <span class="pl-en">incrementSortie</span><span class="pl-k">:</span> <span class="pl-k">function</span>() {
-    <span class="pl-en">incrementPilotSortie</span>(<span class="pl-v">this</span>.<span class="pl-smi">state</span>.<span class="pl-smi">pilot</span>.<span class="pl-c1">id</span>);
-  },
-  <span class="pl-en">render</span><span class="pl-k">:</span> <span class="pl-k">function</span>() {
-    <span class="pl-k">return</span> ( <span class="pl-c">/*... some jsx  ... */</span> );
-  }
-})</pre></div>
-
-<h2>
-<a id="api" class="anchor" href="#api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API</h2>
-
-<h3>
-<a id="streams-1" class="anchor" href="#streams-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Streams</h3>
-
+myStream.state = myStream.state.set(&apos;name&apos;, &apos;Kar&#xE9; Kun&apos;);
+// nothing logs.</code>
+</code></pre>
+<h2 id="manual">Manual</h2>
+<p><a href="https://github.com/jkyle/protonic/blob/master/manual/1-overview.md">Overview</a></p>
+<p><a href="https://github.com/jkyle/protonic/tree/master/manual/2-getting-started.md">Getting Started</a></p>
+<p><a href="https://github.com/jkyle/protonic/tree/master/manual/3-data-flow.md">One-Way Data Flow</a></p>
+<p><a href="https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md">Example Components in Angular and React</a></p>
+<p><a href="https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md">Other Streams: Funnels and Views</a></p>
+<p><a href="https://jkyle.github.io/protonic">Source Documentation</a></p>
+<h2 id="actions-and-transformers">Actions and Transformers</h2>
+<h3 id="transformers">Transformers</h3>
+<p>Transformers are solely responsible for manipulating state for a stream. They are not pure reducers, however. Transformers don&apos;t take state as an input. Rather, they fetch the current state from the stream directly. They also do not return new state. Rather, they send the new state back to the stream. Regardless, transformers should still follow the same rules as pure reducers, specifically that they do not depend on state outside of the stream, and that they do not alter state outside of the stream.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">// A typical transformer
+function incrementPilotSortie(amount) {
+  let currentState = stream.state; // state is an Immutable data structure.
+  let sorties = currentState.get(&apos;sorties&apos;);
+  let newSorties = sorties + amount;
+  let newState = currentState.set(&apos;sorties&apos;, newSorties);
+  stream.next(newState);
+}</code>
+</code></pre>
+<p>This can be simplified to:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">// A typical transformer
+function incrementPilotSortie(amount) {
+  stream.state = stream.state.update(&apos;sorties&apos;, num =&gt; num + amount);
+}</code>
+</code></pre>
+<h3 id="actions">Actions</h3>
+<p>Most of the time, when a user triggers an action, we would expect state in multiple streams to be update. An example would be a section of the UI updating to show a progress bar or spinner when data is fetched from the server. Since transformers are prohibited from affecting state from outside their stream, actions are our way of combining transformers and necessary side-effects (ajax calls, for example).</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">function getPilots () {
+  uiTransformers.setSpinner(true);
+  $get(&apos;api/to/pilots&apos;)
+    .then(result =&gt; {
+      pilotTransformers.updatePilots(result);
+      uiTransformers.setSpinner(false);
+    },
+    error =&gt; {
+      uiTransformers.setSpinner(false);
+      uiTransformers.setError(error);
+    });
+}</code>
+</code></pre>
+<h2 id="api">API</h2>
+<h3 id="streams">Streams</h3>
 <p>A stream is created by calling <code>new Stream()</code> an optionally passing in an initial state. If you do
 pass in an initial state, it must be an <code>Immutable</code> data structure.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Stream } from &apos;protonic&apos;;
 
-<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> { <span class="pl-smi">Stream</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>protonic<span class="pl-pds">'</span></span>;
-
-<span class="pl-k">let</span> myStream <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Stream</span>(<span class="pl-smi">Immutable</span>.<span class="pl-en">Map</span>({name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Testor<span class="pl-pds">'</span></span>}));</pre></div>
-
+let myStream = new Stream(Immutable.Map({name: &apos;Testor&apos;}));</code>
+</code></pre>
 <p>You can get the current state of a stream at any time by access the <code>.state</code> property.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">let currentState = myStream.state;
+// currentState is Immutable.Map of {name: &apos;Testor&apos;}</code>
+</code></pre>
+<p>You can subscribe to any changes to the stream&apos;s state with the <code>.subscribe</code> method. <code>.subscribe</code> takes a callback function (we&apos;ll call it an <em>observer</em>) that is called any time the stream&apos;s state changes. <code>.subscribe</code> returns an object with an <code>.unsubscribe</code> method. <code>.unsubscribe</code> should be called whenever the observer is done listening to state changes.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">let subscriber = myStream.subscribe(state =&gt; console.log(state));
+// logs out state anytime state changes.
 
-<div class="highlight highlight-source-js"><pre><span class="pl-k">let</span> currentState <span class="pl-k">=</span> <span class="pl-smi">myStream</span>.<span class="pl-smi">state</span>;
-<span class="pl-c">// currentState is Immutable.Map of {name: 'Testor'}</span></pre></div>
-
-<p>You can subscribe to any changes to the stream's state with the <code>.subscribe</code> method. <code>.subscribe</code> takes a callback function (we'll call it an <em>observer</em>) that is called any time the stream's state changes. <code>.subscribe</code> returns an object with an <code>.unsubscribe</code> method. <code>.unsubscribe</code> should be called whenever the observer is done listening to state changes.</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">let</span> subscriber <span class="pl-k">=</span> <span class="pl-smi">myStream</span>.<span class="pl-en">subscribe</span>(<span class="pl-smi">state</span> <span class="pl-k">=&gt;</span> <span class="pl-en">console</span>.<span class="pl-c1">log</span>(state));
-<span class="pl-c">// logs out state anytime state changes.</span>
-
-<span class="pl-c">// later on</span>
-<span class="pl-smi">subscriber</span>.<span class="pl-en">unsubscribe</span>();</pre></div>
-
-<p>You can send new state to the stream with the <code>.next(newState)</code> method. This will send the state to any observers, provided that the new state is not falsey and is distinct from the stream's current state.</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">myStream</span>.<span class="pl-c1">next</span>(<span class="pl-smi">Immutable</span>.<span class="pl-en">Map</span>({name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Snap<span class="pl-pds">'</span></span>}))
-<span class="pl-c">// myStream.state is now Immutable.Map of {name: 'Snap'}</span></pre></div>
-
+// later on
+subscriber.unsubscribe();</code>
+</code></pre>
+<p>You can send new state to the stream with the <code>.next(newState)</code> method. This will send the state to any observers, provided that the new state is not falsey and is distinct from the stream&apos;s current state.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">myStream.next(Immutable.Map({name: &apos;Snap&apos;}))
+// myStream.state is now Immutable.Map of {name: &apos;Snap&apos;}</code>
+</code></pre>
 <p>Protonic also allows you to set the state through the <code>.state</code> setter property. It is functionally equivalent to calling <code>.next(newState)</code>, but might be more declarative:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">myStream.state = Immutable.Map({name: &apos;Snap&apos;});
+// myStream.state is now Immutable.Map of {name: &apos;Snap&apos;}</code>
+</code></pre>
+<h3 id="funnels">Funnels</h3>
+<p>A funnel is created with <code>new Funnel()</code> and takes a required argument which is a map of streams to combine into one state object. The key for each stream in the map will end up corresponding to the key for that stream&apos;s part of the state in the combined state object.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Funnel } from &apos;protonic&apos;;
+import pilotStream from &apos;path/to/pilot-stream&apos;;
+import shipStream from &apos;path/to/ship-stream&apos;;
 
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">myStream</span>.<span class="pl-smi">state</span> <span class="pl-k">=</span> <span class="pl-smi">Immutable</span>.<span class="pl-en">Map</span>({name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Snap<span class="pl-pds">'</span></span>});
-<span class="pl-c">// myStream.state is now Immutable.Map of {name: 'Snap'}</span></pre></div>
-
-<h3>
-<a id="funnels-1" class="anchor" href="#funnels-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Funnels</h3>
-
-<p>A funnel is created with <code>new Funnel()</code> and takes a required argument which is a map of streams to combine into one state object. The key for each stream in the map will end up corresponding to the key for that stream's part of the state in the combined state object.</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> { <span class="pl-smi">Funnel</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>protonic<span class="pl-pds">'</span></span>;
-<span class="pl-k">import</span> <span class="pl-smi">pilotStream</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>path/to/pilot-stream<span class="pl-pds">'</span></span>;
-<span class="pl-k">import</span> <span class="pl-smi">shipStream</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>path/to/ship-stream<span class="pl-pds">'</span></span>;
-
-<span class="pl-k">let</span> AppStream <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Funnel</span>(<span class="pl-smi">Immutable</span>.<span class="pl-en">Map</span>({
-  Pilots<span class="pl-k">:</span> pilotStream,
-  Ships<span class="pl-k">:</span> shipStream
-}))</pre></div>
-
+let AppStream = new Funnel(Immutable.Map({
+  Pilots: pilotStream,
+  Ships: shipStream
+}))</code>
+</code></pre>
 <p>Just like with Streams, you can get the current state of the Funnel with the <code>.state</code> property.</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">let</span> currentState <span class="pl-k">=</span> <span class="pl-smi">AppStream</span>.<span class="pl-smi">state</span>;
-<span class="pl-c">// currentState is Immutable.Map of</span>
-<span class="pl-c">// { Pilot: { name: 'Testor' },</span>
-<span class="pl-c">//   Ship: { type: 'X-Wing' } }</span></pre></div>
-
+<pre><code class="lang-javascript"><code class="source-code prettyprint">let currentState = AppStream.state;
+// currentState is Immutable.Map of
+// { Pilot: { name: &apos;Testor&apos; },
+//   Ship: { type: &apos;X-Wing&apos; } }</code>
+</code></pre>
 <p>Also like Streams, you can subscribe to state changes with the <code>.subscribe</code> method. Note that state will not be sent to observers until all of the source streams have emitted state to the funnel.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">let subscriber = AppStream.subscribe(state =&gt; console.log(state));
+// logs out state anytime state changes.
 
-<div class="highlight highlight-source-js"><pre><span class="pl-k">let</span> subscriber <span class="pl-k">=</span> <span class="pl-smi">AppStream</span>.<span class="pl-en">subscribe</span>(<span class="pl-smi">state</span> <span class="pl-k">=&gt;</span> <span class="pl-en">console</span>.<span class="pl-c1">log</span>(state));
-<span class="pl-c">// logs out state anytime state changes.</span>
-
-<span class="pl-c">// later on</span>
-<span class="pl-smi">subscriber</span>.<span class="pl-en">unsubscribe</span>();</pre></div>
-
+// later on
+subscriber.unsubscribe();</code>
+</code></pre>
 <p>Finally, when you are done with a Funnel, you can call <code>.destroy</code> method to clean up the Funnel and unsubscribe from the source streams.</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">AppStream</span>.<span class="pl-en">destroy</span>()</pre></div>
-
-<h3>
-<a id="views-1" class="anchor" href="#views-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Views</h3>
-
+<pre><code class="lang-javascript"><code class="source-code prettyprint">AppStream.destroy()</code>
+</code></pre>
+<h3 id="views">Views</h3>
 <p>A View is created with <code>new View(soureStream, viewFunction)</code>, and requires a source stream which it will subscribe to and a view function to change the shape of the state before emitting to its own subscribers.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { View } from &apos;protonic&apos;;
+import AppStream from &apos;path/to/app-stream&apos;;
 
-<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> { <span class="pl-smi">View</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>protonic<span class="pl-pds">'</span></span>;
-<span class="pl-k">import</span> <span class="pl-smi">AppStream</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>path/to/app-stream<span class="pl-pds">'</span></span>;
-
-<span class="pl-k">let</span> myView <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">View</span>(AppStream, <span class="pl-smi">state</span> <span class="pl-k">=&gt;</span> {
-  <span class="pl-k">let</span> pilotName <span class="pl-k">=</span> <span class="pl-smi">state</span>.<span class="pl-en">getIn</span>([<span class="pl-s"><span class="pl-pds">'</span>Pilot<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>]);
-  <span class="pl-k">let</span> shipType <span class="pl-k">=</span> <span class="pl-smi">state</span>.<span class="pl-en">getIn</span>([<span class="pl-s"><span class="pl-pds">'</span>Ship<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>type<span class="pl-pds">'</span></span>]);
-  <span class="pl-k">return</span> <span class="pl-smi">Immutable</span>.<span class="pl-en">Map</span>({
-    description<span class="pl-k">:</span> pilotName <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span> flies an <span class="pl-pds">'</span></span> <span class="pl-k">+</span> shipType
+let myView = new View(AppStream, state =&gt; {
+  let pilotName = state.getIn([&apos;Pilot&apos;, &apos;name&apos;]);
+  let shipType = state.getIn([&apos;Ship&apos;, &apos;type&apos;]);
+  return Immutable.Map({
+    description: pilotName + &apos; flies an &apos; + shipType
   });
-})</pre></div>
-
+})</code>
+</code></pre>
 <p>As with Streams and Funnels, the current state of a View is accessible by its <code>.state</code> property:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">let</span> currentState <span class="pl-k">=</span> <span class="pl-smi">myView</span>.<span class="pl-smi">state</span>;
-<span class="pl-c">// currentState is Immutable.Map of { description: 'Testor flies an X-Wing' }</span></pre></div>
-
+<pre><code class="lang-javascript"><code class="source-code prettyprint">let currentState = myView.state;
+// currentState is Immutable.Map of { description: &apos;Testor flies an X-Wing&apos; }</code>
+</code></pre>
 <p>Also like Streams and Funnels, you can subscribe to state changes from the view. Just like Streams, observers will only receive state if the new state calculated by the View is distinct from the last state calculated by the View.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">let subscriber = myView.subscribe(state =&gt; console.log(state));
+// logs out state anytime state changes.
 
-<div class="highlight highlight-source-js"><pre><span class="pl-k">let</span> subscriber <span class="pl-k">=</span> <span class="pl-smi">myView</span>.<span class="pl-en">subscribe</span>(<span class="pl-smi">state</span> <span class="pl-k">=&gt;</span> <span class="pl-en">console</span>.<span class="pl-c1">log</span>(state));
-<span class="pl-c">// logs out state anytime state changes.</span>
-
-<span class="pl-c">// later on</span>
-<span class="pl-smi">subscriber</span>.<span class="pl-en">unsubscribe</span>();</pre></div>
-
+// later on
+subscriber.unsubscribe();</code>
+</code></pre>
 <p>And, like Funnels, when you are done with a View, it can be cleaned up with the <code>.destroy</code> method.</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">myView</span>.<span class="pl-en">destroy</span>();</pre></div>
-
-<h2>
-<a id="actions-and-transformers" class="anchor" href="#actions-and-transformers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Actions and Transformers</h2>
-
-<p><strong>TODO</strong> Show code examples for actions and transformers</p>
-
-<h2>
-<a id="logging-and-debugging" class="anchor" href="#logging-and-debugging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Logging and Debugging</h2>
-
+<pre><code class="lang-javascript"><code class="source-code prettyprint">myView.destroy();</code>
+</code></pre>
+<h2 id="logging-and-debugging">Logging and Debugging</h2>
 <p><strong>TODO</strong> Talk about Logging/Debugging with Stacks.</p>
-
-<h2>
-<a id="why-protonic" class="anchor" href="#why-protonic" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why Protonic</h2>
-
+<h2 id="why-protonic">Why Protonic</h2>
 <p><strong>TODO</strong> Talk more about philosophy of Protonic</p>
-
 <p><strong>TODO</strong> Talk about gotchas (i.e. Actions cannot subscribe to streams)</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/jkyle">jkyle</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
-  </body>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
 </html>

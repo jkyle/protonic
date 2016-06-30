@@ -1,0 +1,58 @@
+{
+  "coverage": "28.94%",
+  "expectCount": 38,
+  "actualCount": 11,
+  "files": {
+    "src/funnel.js": {
+      "expectCount": 7,
+      "actualCount": 3,
+      "undocumentLines": [
+        24,
+        25,
+        28,
+        26
+      ]
+    },
+    "src/stack.js": {
+      "expectCount": 16,
+      "actualCount": 1,
+      "undocumentLines": [
+        14,
+        9,
+        11,
+        39,
+        48,
+        43,
+        45,
+        20,
+        35,
+        24,
+        31,
+        75,
+        71,
+        10,
+        44
+      ]
+    },
+    "src/stream.js": {
+      "expectCount": 10,
+      "actualCount": 6,
+      "undocumentLines": [
+        28,
+        29,
+        24,
+        30
+      ]
+    },
+    "src/view.js": {
+      "expectCount": 5,
+      "actualCount": 1,
+      "undocumentLines": [
+        9,
+        16,
+        12,
+        13
+      ]
+    }
+  }
+}
