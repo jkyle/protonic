@@ -309,7 +309,45 @@ myView.destroy();
 
 
 ## Actions and Transformers
-**TODO** Show code examples for actions and transformers
+
+### Transformers
+As mentioned above, transformers are solely responsible for manipulating state for a stream. They are not pure reducers, however. Transformers don't take state as an input. Rather, they fetch the current state from the stream directly. They also do not return new state. Rather, they send the new state back to the stream. Regardless, transformers should still follow the same rules as pure reducers, specifically that they do not depend on state outside of the stream, and that they do not alter state outside of the stream.
+
+```javascript
+// A typical transformer
+function incrementPilotSortie(amount) {
+  let currentState = stream.state; // state is an Immutable data structure.
+  let sorties = currentState.get('sorties');
+  let newSorties = sorties + amount;
+  let newState = currentState.set('sorties', newSorties);
+  stream.next(newState);
+}
+```
+This can be simplified to:
+```javascript
+// A typical transformer
+function incrementPilotSortie(amount) {
+  stream.state = stream.state.update('sorties', num => num + amount);
+}
+```
+
+### Actions
+Most of the time, when a user triggers an action, we would expect state in multiple streams to be update. An example would be a section of the UI updating to show a progress bar or spinner when data is fetched from the server. Since transformers are prohibited from affecting state from outside their stream, actions are our way of combining transformers and necessary side-effects (ajax calls, for example).
+
+```javascript
+function getPilots () {
+  uiTransformers.setSpinner(true);
+  $get('api/to/pilots')
+    .then(result => {
+      pilotTransformers.updatePilots(result);
+      uiTransformers.setSpinner(false);
+    },
+    error => {
+      uiTransformers.setSpinner(false);
+      uiTransformers.setError(error);
+    });
+}
+```
 
 
 ## Logging and Debugging
