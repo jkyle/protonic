@@ -169,7 +169,10 @@ export default React.createClass({
           }
   },
   componentDidMount: function() {
-    AppStream.subscribe(state => this.setState({ pilot: state.toJS() }));
+    this.subscriber = AppStream.subscribe(state => this.setState({ pilot: state.toJS() }));
+  },
+  componentWillUnmount: function() {
+    this.subscriber.unsubscribe();
   },
   incrementSortie: function() {
     incrementPilotSortie(this.state.pilot.id);
