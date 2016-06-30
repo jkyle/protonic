@@ -38,12 +38,17 @@ myStream.state = myStream.state.set('name', 'Karé Kun');
 ```
 
 ## Manual
-(Overview)[https://github.com/jkyle/protonic/tree/master/manual/1-overview.md]
-(Getting Started)[https://github.com/jkyle/protonic/tree/master/manual/2-getting-started.md]
-(One-Way Data Flow)[https://github.com/jkyle/protonic/tree/master/manual/3-data-flow.md]
-(Example Components in Angular and React)[https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md]
-(Other Streams: Funnels and Views)[https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md]
-(Source Documentation)[https://jkyle.github.io/protonic]
+[Overview](https://github.com/jkyle/protonic/blob/master/manual/1-overview.md)
+
+[Getting Started](https://github.com/jkyle/protonic/tree/master/manual/2-getting-started.md)
+
+[One-Way Data Flow](https://github.com/jkyle/protonic/tree/master/manual/3-data-flow.md)
+
+[Example Components in Angular and React](https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md)
+
+[Other Streams: Funnels and Views](https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md)
+
+[Source Documentation](https://jkyle.github.io/protonic)
 
 ## Actions and Transformers
 

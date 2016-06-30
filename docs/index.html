@@ -70,12 +70,12 @@ myStream.state = myStream.state.set(&apos;name&apos;, &apos;Kar&#xE9; Kun&apos;)
 // nothing logs.</code>
 </code></pre>
 <h2 id="manual">Manual</h2>
-<p>(Overview)[<a href="https://github.com/jkyle/protonic/tree/master/manual/1-overview.md">https://github.com/jkyle/protonic/tree/master/manual/1-overview.md</a>]
-(Getting Started)[<a href="https://github.com/jkyle/protonic/tree/master/manual/2-getting-started.md">https://github.com/jkyle/protonic/tree/master/manual/2-getting-started.md</a>]
-(One-Way Data Flow)[<a href="https://github.com/jkyle/protonic/tree/master/manual/3-data-flow.md">https://github.com/jkyle/protonic/tree/master/manual/3-data-flow.md</a>]
-(Example Components in Angular and React)[<a href="https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md">https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md</a>]
-(Other Streams: Funnels and Views)[<a href="https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md">https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md</a>]
-(Source Documentation)[<a href="https://jkyle.github.io/protonic">https://jkyle.github.io/protonic</a>]</p>
+<p><a href="https://github.com/jkyle/protonic/blob/master/manual/1-overview.md">Overview</a></p>
+<p><a href="https://github.com/jkyle/protonic/tree/master/manual/2-getting-started.md">Getting Started</a></p>
+<p><a href="https://github.com/jkyle/protonic/tree/master/manual/3-data-flow.md">One-Way Data Flow</a></p>
+<p><a href="https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md">Example Components in Angular and React</a></p>
+<p><a href="https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md">Other Streams: Funnels and Views</a></p>
+<p><a href="https://jkyle.github.io/protonic">Source Documentation</a></p>
 <h2 id="actions-and-transformers">Actions and Transformers</h2>
 <h3 id="transformers">Transformers</h3>
 <p>Transformers are solely responsible for manipulating state for a stream. They are not pure reducers, however. Transformers don&apos;t take state as an input. Rather, they fetch the current state from the stream directly. They also do not return new state. Rather, they send the new state back to the stream. Regardless, transformers should still follow the same rules as pure reducers, specifically that they do not depend on state outside of the stream, and that they do not alter state outside of the stream.</p>
