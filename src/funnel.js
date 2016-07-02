@@ -19,15 +19,28 @@ class Funnel extends Stream {
    * @return {Funnel}           returns an instance of the Funnel stream.
    */
   constructor (sourceMap) {
+    if(!sourceMap){
+      throw new Error('You must supply a source map to a funnel');
+    }
+
+    if(!Immutable.Iterable.isKeyed(sourceMap)){
+      throw new Error('You must supply an Immutable.Map as a source map to a funnel');
+    }
     super(Immutable.Map());
 
     this.primed = false;
+    this.sourceMap = sourceMap;
     this.sourceKeys = sourceMap.keySeq();
     this.subscribers = sourceMap.map((sourceStream, key) => {
+      if(sourceStream.type === 'VIEW') {
+          throw new Error('Funnels cannot subscribe to Views. At key ' + key);
+      }
+
       return sourceStream.subscribe(newState => {
         this.state = this.state.set(key, newState);
       });
     });
+    this.type = 'FUNNEL';
   }
 
   /**
@@ -49,6 +62,27 @@ class Funnel extends Stream {
         this._state = newState;
       }
     }
+  }
+
+  subscribe (observer) {
+    this.observers = this.observers.push(observer);
+    if(this.primed) { observer(this._state); }
+    return {
+      unsubscribe: () => {
+        const idx = this.observers.indexOf(observer);
+        if (idx >= 0) {
+          this.observers = this.observers.delete(this.observers.indexOf(observer));
+        } else {
+          throw new RangeError('Observer is not subscribed to this stream.');
+        }
+      }
+    };
+  }
+
+  forceState (state) {
+    this.sourceMap.forEach((sourceStream, key) => {
+      sourceStream.forceState(state.get(key));
+    });
   }
 
   /**

@@ -11,6 +11,11 @@ class View extends Stream {
 
     this.source = source;
     this.sourceSubscriber = source.subscribe( state => this.next(viewFn(state)) );
+    this.type = 'VIEW';
+  }
+
+  forceState () {
+    throw new Error('Cannot force state on a View.')
   }
 
   destroy () {
