@@ -131,6 +131,31 @@ streams.</p>
     <td>
       <div>
         <p>
+           <span data-ice="name"><span><a href="class/src/funnel.js~Funnel.html#instance-member-observers">observers</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
            <span data-ice="name"><span><a href="class/src/funnel.js~Funnel.html#instance-member-primed">primed</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
         </p>
       </div>
@@ -157,6 +182,31 @@ streams.</p>
       <div>
         <p>
            <span data-ice="name"><span><a href="class/src/funnel.js~Funnel.html#instance-member-sourceKeys">sourceKeys</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/funnel.js~Funnel.html#instance-member-sourceMap">sourceMap</a></span></span><span data-ice="signature">: <span>*</span></span>
         </p>
       </div>
       <div>
@@ -220,6 +270,31 @@ streams.</p>
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -253,6 +328,61 @@ streams.</p>
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/funnel.js~Funnel.html#instance-method-forceState">forceState</a></span></span><span data-ice="signature">(state: <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span>): <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>forceState - Funnels can accept new state an send state back up
+the subscription chain.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/funnel.js~Funnel.html#instance-method-subscribe">subscribe</a></span></span><span data-ice="signature">(observer: <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span>): <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>subscribe - Overwrites base Stream class&apos;s subscribe method.
+Funnels should not emit state to subscribers until all source
+streams have defined state.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -274,7 +404,7 @@ streams.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber21">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber22">source</a></span></span>
     </span>
   </h3>
 
@@ -340,6 +470,46 @@ that stream on the combined state object.</p>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-observers">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">observers</span><span data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber77">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-primed">
     <span class="access" data-ice="access">public</span>
     
@@ -350,7 +520,7 @@ that stream on the combined state object.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber32">source</a></span></span>
     </span>
   </h3>
 
@@ -390,7 +560,47 @@ that stream on the combined state object.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber25">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber34">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-sourceMap">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">sourceMap</span><span data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber33">source</a></span></span>
     </span>
   </h3>
 
@@ -430,7 +640,7 @@ that stream on the combined state object.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber41">source</a></span></span>
     </span>
   </h3>
 
@@ -470,7 +680,47 @@ that stream on the combined state object.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber26">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber35">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-type">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">type</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber44">source</a></span></span>
     </span>
   </h3>
 
@@ -513,7 +763,7 @@ that stream on the combined state object.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber59">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber111">source</a></span></span>
     </span>
   </h3>
 
@@ -529,6 +779,148 @@ that stream on the combined state object.</p>
 </div>
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-forceState">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">forceState</span><span data-ice="signature">(state: <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span>): <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber100">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>forceState - Funnels can accept new state an send state back up
+the subscription chain. This should only be used in cases of
+restoring state.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">state</td>
+      <td data-ice="type"><span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>description</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>description</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-subscribe">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">subscribe</span><span data-ice="signature">(observer: <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span>): <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/funnel.js.html#lineNumber76">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>subscribe - Overwrites base Stream class&apos;s subscribe method.
+Funnels should not emit state to subscribers until all source
+streams have defined state.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">observer</td>
+      <td data-ice="type"><span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>description</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>description</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 

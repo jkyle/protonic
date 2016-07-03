@@ -28,6 +28,7 @@ class View extends Stream {
     if (!viewFn || (typeof viewFn !== 'function')) {
       throw new Error('Views require a view function.');
     }
+
     super();
 
     this.source = source;

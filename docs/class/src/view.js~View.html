@@ -41,13 +41,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import View from &apos;<span><a href="file/src/view.js.html#lineNumber8">protonic/src/view.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import View from &apos;<span><a href="file/src/view.js.html#lineNumber11">protonic/src/view.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/view.js.html#lineNumber8">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/view.js.html#lineNumber11">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -67,7 +67,10 @@
 
   
   
-  <div class="description" data-ice="description"><p>A View is a kind of Stream the that caches particular a shape of state.</p>
+  <div class="description" data-ice="description"><p>A View is a kind of Stream that is useful for transforming the shape of state for
+use in components or interfaces. A View caches the result of the function, and will
+only emit state to subscribers if the new return value is distinct from the
+previous value.</p>
 </div>
 
   
@@ -96,13 +99,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/view.js~View.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(source: <span>*</span>, viewFn: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/view.js~View.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(source: <span><a href="class/src/stream.js~Stream.html">Stream</a></span>, viewFn: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span>): <span><a href="class/src/view.js~View.html">View</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>constructor - Takes a source stream, and transforms it through a function.</p>
+</div>
       </div>
     </td>
     <td>
@@ -167,6 +171,31 @@
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/view.js~View.html#instance-member-type">type</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -185,13 +214,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/view.js~View.html#instance-method-destroy">destroy</a></span></span><span data-ice="signature">()</span>
+           <span data-ice="name"><span><a href="class/src/view.js~View.html#instance-method-destroy">destroy</a></span></span><span data-ice="signature">(): <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>destroy - Clean up subscriptions.</p>
+</div>
       </div>
     </td>
     <td>
@@ -216,18 +246,21 @@
     
     
     
-    <span data-ice="name">constructor</span><span data-ice="signature">(source: <span>*</span>, viewFn: <span>*</span>)</span>
+    <span data-ice="name">constructor</span><span data-ice="signature">(source: <span><a href="class/src/stream.js~Stream.html">Stream</a></span>, viewFn: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span>): <span><a href="class/src/view.js~View.html">View</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/view.js.html#lineNumber9">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/view.js.html#lineNumber23">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>constructor - Takes a source stream, and transforms it through a function.
+The view function takes state from the source stream and transforms it into
+returns a new shape of the state for use in a component or interface.</p>
+</div>
 
   
 
@@ -241,22 +274,34 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">source</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="class/src/stream.js~Stream.html">Stream</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>A stream to receive state from (can be a source stream or a funnel)</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">viewFn</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>A function that takes state and returns a new shape for the state.</p>
+</td>
     </tr>
 </tbody>
   </table>
 </div>
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="class/src/view.js~View.html">View</a></span></td>
+        
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -285,7 +330,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/view.js.html#lineNumber12">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/view.js.html#lineNumber34">source</a></span></span>
     </span>
   </h3>
 
@@ -325,7 +370,47 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/view.js.html#lineNumber13">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/view.js.html#lineNumber35">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-type">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">type</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/view.js.html#lineNumber36">source</a></span></span>
     </span>
   </h3>
 
@@ -364,25 +449,37 @@
     
     
     
-    <span data-ice="name">destroy</span><span data-ice="signature">()</span>
+    <span data-ice="name">destroy</span><span data-ice="signature">(): <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/view.js.html#lineNumber16">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/view.js.html#lineNumber55">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>destroy - Clean up subscriptions.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>description</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 

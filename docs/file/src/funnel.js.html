@@ -58,19 +58,33 @@ class Funnel extends Stream {
    * the combined state. The key for each stream will be the key used to access the state of
    * that stream on the combined state object.
    *
+   * @access public
    * @param  {Immutable.Map} sourceMap - a Map of the feeder streams.
    * @return {Funnel}           returns an instance of the Funnel stream.
    */
   constructor (sourceMap) {
+    if(!sourceMap){
+      throw new Error(&apos;You must supply a source map to a funnel&apos;);
+    }
+
+    if(!Immutable.Iterable.isKeyed(sourceMap)){
+      throw new Error(&apos;You must supply an Immutable.Map as a source map to a funnel&apos;);
+    }
     super(Immutable.Map());
 
     this.primed = false;
+    this.sourceMap = sourceMap;
     this.sourceKeys = sourceMap.keySeq();
     this.subscribers = sourceMap.map((sourceStream, key) =&gt; {
+      if(sourceStream.type === &apos;VIEW&apos;) {
+          throw new Error(&apos;Funnels cannot subscribe to Views. At key &apos; + key);
+      }
+
       return sourceStream.subscribe(newState =&gt; {
         this.state = this.state.set(key, newState);
       });
     });
+    this.type = &apos;FUNNEL&apos;;
   }
 
   /**
@@ -92,6 +106,44 @@ class Funnel extends Stream {
         this._state = newState;
       }
     }
+  }
+
+  /**
+   * subscribe - Overwrites base Stream class&apos;s subscribe method.
+   * Funnels should not emit state to subscribers until all source
+   * streams have defined state.
+   *
+   * @param  {type} observer description
+   * @return {type}          description
+   */
+  subscribe (observer) {
+    this.observers = this.observers.push(observer);
+    if(this.primed) { observer(this._state); }
+    return {
+      unsubscribe: () =&gt; {
+        const idx = this.observers.indexOf(observer);
+        if (idx &gt;= 0) {
+          this.observers = this.observers.delete(this.observers.indexOf(observer));
+        } else {
+          throw new RangeError(&apos;Observer is not subscribed to this stream.&apos;);
+        }
+      }
+    };
+  }
+
+  /**
+   * forceState - Funnels can accept new state an send state back up
+   * the subscription chain. This should only be used in cases of
+   * restoring state.
+   *
+   * @access public
+   * @param  {type} state description
+   * @return {type}       description
+   */
+  forceState (state) {
+    this.sourceMap.forEach((sourceStream, key) =&gt; {
+      sourceStream.forceState(state.get(key));
+    });
   }
 
   /**

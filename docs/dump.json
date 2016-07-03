@@ -10,7 +10,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import Immutable from 'immutable';\nimport Stream from './stream';\n\n/**\n * A Funnel is a special type of Stream that combines the states from feeder\n * streams.\n * @extends Stream\n */\nclass Funnel extends Stream {\n\n  /**\n   * A Funnel is a special type of Stream that combines the states from feeder\n   * streams. Once all of the feeder streams have sent state, the Funnel will send the combined\n   * state to any observers. When creating the Funnel, the sourceMap describes the shape of\n   * the combined state. The key for each stream will be the key used to access the state of\n   * that stream on the combined state object.\n   *\n   * @param  {Immutable.Map} sourceMap - a Map of the feeder streams.\n   * @return {Funnel}           returns an instance of the Funnel stream.\n   */\n  constructor (sourceMap) {\n    super(Immutable.Map());\n\n    this.primed = false;\n    this.sourceKeys = sourceMap.keySeq();\n    this.subscribers = sourceMap.map((sourceStream, key) => {\n      return sourceStream.subscribe(newState => {\n        this.state = this.state.set(key, newState);\n      });\n    });\n  }\n\n  /**\n   * sendState - overwrites Stream's `sendState` by enforcing that all feeder streams have\n   * sent state before sending state on to observers. Once a Funnel is `primed` it will pass\n   * state on, regardless if one stream sends `undefined`.\n   *\n   * @access private\n   * @param  {Immutable} newState - new state (received internally from Stream's `next` method)\n   */\n  sendState (newState) {\n    if(this.primed){\n      super.sendState(newState);\n    } else {\n      if (this.sourceKeys.every(source => newState.get(source))) {\n        this.primed = true;\n        super.sendState(newState);\n      } else {\n        this._state = newState;\n      }\n    }\n  }\n\n  /**\n   * destroy - cleans up a Funnel's feeder subscribers.\n   *\n   * @access public\n   */\n  destroy () {\n    this.subscribers.forEach(subscriber => subscriber.unsubscribe());\n  }\n\n}\n\nexport default Funnel;\n"
+    "content": "import Immutable from 'immutable';\nimport Stream from './stream';\n\n/**\n * A Funnel is a special type of Stream that combines the states from feeder\n * streams.\n * @extends Stream\n */\nclass Funnel extends Stream {\n\n  /**\n   * A Funnel is a special type of Stream that combines the states from feeder\n   * streams. Once all of the feeder streams have sent state, the Funnel will send the combined\n   * state to any observers. When creating the Funnel, the sourceMap describes the shape of\n   * the combined state. The key for each stream will be the key used to access the state of\n   * that stream on the combined state object.\n   *\n   * @access public\n   * @param  {Immutable.Map} sourceMap - a Map of the feeder streams.\n   * @return {Funnel}           returns an instance of the Funnel stream.\n   */\n  constructor (sourceMap) {\n    if(!sourceMap){\n      throw new Error('You must supply a source map to a funnel');\n    }\n\n    if(!Immutable.Iterable.isKeyed(sourceMap)){\n      throw new Error('You must supply an Immutable.Map as a source map to a funnel');\n    }\n    super(Immutable.Map());\n\n    this.primed = false;\n    this.sourceMap = sourceMap;\n    this.sourceKeys = sourceMap.keySeq();\n    this.subscribers = sourceMap.map((sourceStream, key) => {\n      if(sourceStream.type === 'VIEW') {\n          throw new Error('Funnels cannot subscribe to Views. At key ' + key);\n      }\n\n      return sourceStream.subscribe(newState => {\n        this.state = this.state.set(key, newState);\n      });\n    });\n    this.type = 'FUNNEL';\n  }\n\n  /**\n   * sendState - overwrites Stream's `sendState` by enforcing that all feeder streams have\n   * sent state before sending state on to observers. Once a Funnel is `primed` it will pass\n   * state on, regardless if one stream sends `undefined`.\n   *\n   * @access private\n   * @param  {Immutable} newState - new state (received internally from Stream's `next` method)\n   */\n  sendState (newState) {\n    if(this.primed){\n      super.sendState(newState);\n    } else {\n      if (this.sourceKeys.every(source => newState.get(source))) {\n        this.primed = true;\n        super.sendState(newState);\n      } else {\n        this._state = newState;\n      }\n    }\n  }\n\n  /**\n   * subscribe - Overwrites base Stream class's subscribe method.\n   * Funnels should not emit state to subscribers until all source\n   * streams have defined state.\n   *\n   * @param  {type} observer description\n   * @return {type}          description\n   */\n  subscribe (observer) {\n    this.observers = this.observers.push(observer);\n    if(this.primed) { observer(this._state); }\n    return {\n      unsubscribe: () => {\n        const idx = this.observers.indexOf(observer);\n        if (idx >= 0) {\n          this.observers = this.observers.delete(this.observers.indexOf(observer));\n        } else {\n          throw new RangeError('Observer is not subscribed to this stream.');\n        }\n      }\n    };\n  }\n\n  /**\n   * forceState - Funnels can accept new state an send state back up\n   * the subscription chain. This should only be used in cases of\n   * restoring state.\n   *\n   * @access public\n   * @param  {type} state description\n   * @return {type}       description\n   */\n  forceState (state) {\n    this.sourceMap.forEach((sourceStream, key) => {\n      sourceStream.forceState(state.get(key));\n    });\n  }\n\n  /**\n   * destroy - cleans up a Funnel's feeder subscribers.\n   *\n   * @access public\n   */\n  destroy () {\n    this.subscribers.forEach(subscriber => subscriber.unsubscribe());\n  }\n\n}\n\nexport default Funnel;\n"
   },
   {
     "__docId__": 1,
@@ -39,9 +39,9 @@
     "name": "constructor",
     "memberof": "src/funnel.js~Funnel",
     "longname": "src/funnel.js~Funnel#constructor",
-    "access": null,
+    "access": "public",
     "description": "A Funnel is a special type of Stream that combines the states from feeder\nstreams. Once all of the feeder streams have sent state, the Funnel will send the combined\nstate to any observers. When creating the Funnel, the sourceMap describes the shape of\nthe combined state. The key for each stream will be the key used to access the state of\nthat stream on the combined state object.",
-    "lineNumber": 21,
+    "lineNumber": 22,
     "params": [
       {
         "nullable": null,
@@ -74,7 +74,7 @@
     "longname": "src/funnel.js~Funnel#primed",
     "access": null,
     "description": null,
-    "lineNumber": 24,
+    "lineNumber": 32,
     "undocument": true,
     "type": {
       "types": [
@@ -87,12 +87,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "sourceKeys",
+    "name": "sourceMap",
     "memberof": "src/funnel.js~Funnel",
-    "longname": "src/funnel.js~Funnel#sourceKeys",
+    "longname": "src/funnel.js~Funnel#sourceMap",
     "access": null,
     "description": null,
-    "lineNumber": 25,
+    "lineNumber": 33,
     "undocument": true,
     "type": {
       "types": [
@@ -105,12 +105,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "subscribers",
+    "name": "sourceKeys",
     "memberof": "src/funnel.js~Funnel",
-    "longname": "src/funnel.js~Funnel#subscribers",
+    "longname": "src/funnel.js~Funnel#sourceKeys",
     "access": null,
     "description": null,
-    "lineNumber": 26,
+    "lineNumber": 34,
     "undocument": true,
     "type": {
       "types": [
@@ -123,12 +123,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "state",
+    "name": "subscribers",
     "memberof": "src/funnel.js~Funnel",
-    "longname": "src/funnel.js~Funnel#state",
+    "longname": "src/funnel.js~Funnel#subscribers",
     "access": null,
     "description": null,
-    "lineNumber": 28,
+    "lineNumber": 35,
     "undocument": true,
     "type": {
       "types": [
@@ -138,6 +138,42 @@
   },
   {
     "__docId__": 7,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "state",
+    "memberof": "src/funnel.js~Funnel",
+    "longname": "src/funnel.js~Funnel#state",
+    "access": null,
+    "description": null,
+    "lineNumber": 41,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 8,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "type",
+    "memberof": "src/funnel.js~Funnel",
+    "longname": "src/funnel.js~Funnel#type",
+    "access": null,
+    "description": null,
+    "lineNumber": 44,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 9,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -146,7 +182,7 @@
     "longname": "src/funnel.js~Funnel#sendState",
     "access": "private",
     "description": "sendState - overwrites Stream's `sendState` by enforcing that all feeder streams have\nsent state before sending state on to observers. Once a Funnel is `primed` it will pass\nstate on, regardless if one stream sends `undefined`.",
-    "lineNumber": 41,
+    "lineNumber": 55,
     "params": [
       {
         "nullable": null,
@@ -162,7 +198,7 @@
     "generator": false
   },
   {
-    "__docId__": 8,
+    "__docId__": 10,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -171,7 +207,7 @@
     "longname": "src/funnel.js~Funnel#primed",
     "access": null,
     "description": null,
-    "lineNumber": 46,
+    "lineNumber": 60,
     "undocument": true,
     "type": {
       "types": [
@@ -180,7 +216,7 @@
     }
   },
   {
-    "__docId__": 9,
+    "__docId__": 11,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -189,7 +225,7 @@
     "longname": "src/funnel.js~Funnel#_state",
     "access": null,
     "description": null,
-    "lineNumber": 49,
+    "lineNumber": 63,
     "undocument": true,
     "type": {
       "types": [
@@ -198,7 +234,109 @@
     }
   },
   {
-    "__docId__": 10,
+    "__docId__": 12,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "subscribe",
+    "memberof": "src/funnel.js~Funnel",
+    "longname": "src/funnel.js~Funnel#subscribe",
+    "access": null,
+    "description": "subscribe - Overwrites base Stream class's subscribe method.\nFunnels should not emit state to subscribers until all source\nstreams have defined state.",
+    "lineNumber": 76,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "type"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "observer",
+        "description": "description"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "type"
+      ],
+      "spread": false,
+      "description": "description"
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 13,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "observers",
+    "memberof": "src/funnel.js~Funnel",
+    "longname": "src/funnel.js~Funnel#observers",
+    "access": null,
+    "description": null,
+    "lineNumber": 77,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 14,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "observers",
+    "memberof": "src/funnel.js~Funnel",
+    "longname": "src/funnel.js~Funnel#observers",
+    "access": null,
+    "description": null,
+    "lineNumber": 83,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 15,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "forceState",
+    "memberof": "src/funnel.js~Funnel",
+    "longname": "src/funnel.js~Funnel#forceState",
+    "access": "public",
+    "description": "forceState - Funnels can accept new state an send state back up\nthe subscription chain. This should only be used in cases of\nrestoring state.",
+    "lineNumber": 100,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "type"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "state",
+        "description": "description"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "type"
+      ],
+      "spread": false,
+      "description": "description"
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 16,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -207,12 +345,12 @@
     "longname": "src/funnel.js~Funnel#destroy",
     "access": "public",
     "description": "destroy - cleans up a Funnel's feeder subscribers.",
-    "lineNumber": 59,
+    "lineNumber": 111,
     "params": [],
     "generator": false
   },
   {
-    "__docId__": 11,
+    "__docId__": 17,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -225,7 +363,7 @@
     "content": "import Stream from './stream';\nimport Stack from './stack';\nimport Funnel from './funnel';\nimport View from './view';\n\nexport { Stream, Stack, Funnel, View };\n"
   },
   {
-    "__docId__": 12,
+    "__docId__": 18,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -235,10 +373,10 @@
     "access": null,
     "description": null,
     "lineNumber": 2,
-    "content": "/** Requires Immutable */\nimport Immutable from 'immutable';\n\n/**\n * A Stack isn't a stream, but can be used in conjunction with streams, actions, and\n * transformers to make debugging much easier.\n */\nclass Stack {\n  constructor (size = 20, debug = false) {\n    this.stack = Immutable.List().setSize(size);\n    this.debug = debug;\n  }\n\n  addToStack (item) {\n    if (this.debug) {\n      this.stack = this.stack.shift().push(item);\n    }\n  }\n\n  pushAction (fn, args) {\n    this.addToStack(Immutable.Map({type: 'ACTION', name: fn, args: args}));\n  }\n\n  pushState (name, state, streamType) {\n    this.addToStack(Immutable.Map({ type: 'STATE', name , state, streamType }));\n    if (this.testFn && this.testFn(state)) {\n      this.dumpWhenCb(this.dump());\n    }\n  }\n\n  pushTransformer (fn, args) {\n    this.addToStack(Immutable.Map({ type: 'TRANSFORMER', name: fn, args: args}));\n  }\n\n  pushLog (text) {\n    this.addToStack(Immutable.Map({ type: 'LOG', text }));\n  }\n\n  dump () {\n    return this.stack.filter(item => item);\n  }\n\n  dumpWhen (testFn, dumpFn) {\n    this.testFn = testFn;\n    this.dumpWhenCb = dumpFn;\n  }\n\n  dumpToLog (stateAccessor) {\n    const toLog = {\n      ACTION: item => console.log('%cACTION ' + '%c'+item.get('name') + '\\n',\n                                  'font-weight: bold; color: #629456', 'font-style: italic; color: #004',\n                                  item.get('args')),\n      LOG: item => console.log('%cLOG\\n' + item.get('text'), 'background: #eee; color: #555'),\n      TRANSFORMER: item => console.log('%cTRANSFORMER ' + '%c' + item.get('name') + '\\n',\n                                       'font-weight: bold; color: #D08A10', 'font-style: italic; color: #004',\n                                       item.get('args')),\n      STATE: (item, stateAccessor = []) => console.log('%cSTATE ' + (item.streamType ? '(' + item.streamType + ')' : '') + '%c' + item.get('name') + '\\n',\n                                            'font-weight: bold; color: #3B74C4', 'font-style: italic; color: #004',\n                                            item.getIn(['state'].concat(stateAccessor)).toJS())\n    };\n\n    if (this.debug) {\n      this.stack.map(item => {\n        if(item){\n          toLog[item.get('type')](item, stateAccessor);\n        }\n      });\n    }\n  }\n\n  set size(newSize) {\n    this.stack.setSize(newSize);\n  }\n\n  get size() {\n    return this.stack.size;\n  }\n}\n\nexport default Stack;\n"
+    "content": "/** Requires Immutable */\nimport Immutable from 'immutable';\n\n/**\n * A Stack isn't a stream, but can be used in conjunction with streams, actions, and\n * transformers to make debugging much easier. Using `pushAction`, 'pushState`,\n * `pushTransformer`, and `pushLog`, you can create a log of state changes and\n * their causes. Calling `dump`, `dumpToLog`, and `dumpWhen` will give you control\n * over when to view to stack.\n */\nclass Stack {\n\n  /**\n   * constructor - A stack takes a size for the stack and a boolean to determine\n   * whether the stack should be enabled on creation.\n   *\n   * @access public\n   * @param  {number} size = 20     The size of the stack.\n   * @param  {boolean} debug = false description\n   * @return {Stack}               description\n   */\n  constructor (size = 20, debug = false) {\n    this.stack = Immutable.List().setSize(size);\n    this.debug = debug;\n  }\n\n  /**\n   * addToStack - Removes the oldest item from the stack,\n   * and adds a new item to the stack.\n   *\n   * @access private\n   * @param  {Immutable.Map} item The new item to add to the stack.\n   */\n  addToStack (item) {\n    if (this.debug) {\n      this.stack = this.stack.shift().push(item);\n    }\n  }\n\n  /**\n   * pushAction - Adds an action to the stack.\n   *\n   * @access public\n   * @param  {string} fnName Name of the action called.\n   * @param  {object} args Arguments to the action called.\n   */\n  pushAction (fnName, args) {\n    this.addToStack(Immutable.Map({type: 'ACTION', name: fnName, args: args}));\n  }\n\n  /**\n   * pushState - Adds a state Map to the stack.\n   *\n   * @access public\n   * @param  {string} name     Name of the stream that's adding state\n   * @param  {Immutable.Map} state      The state object to add to the stack.\n   * @param  {string} streamType The type of stream (View, Funnel, Stream) adding the state.\n   */\n  pushState (name, state, streamType) {\n    this.addToStack(Immutable.Map({ type: 'STATE', name , state, streamType }));\n    if (this.testFn && this.testFn(state)) {\n      this.dumpWhenCb(this.dump());\n    }\n  }\n\n  /**\n   * pushTransformer - Adds a transformer to the stack.\n   *\n   * @access public\n   * @param  {string} fnName Name of the transformer called.\n   * @param  {object} args Arguments to the transformer called.\n   */\n  pushTransformer (fnName, args) {\n    this.addToStack(Immutable.Map({ type: 'TRANSFORMER', name: fnName, args: args}));\n  }\n\n  /**\n   * pushLog - Adds a text log to the stack.\n   *\n   * @param  {string} text The text to be added to the stack.\n   */\n  pushLog (text) {\n    this.addToStack(Immutable.Map({ type: 'LOG', text }));\n  }\n\n  /**\n   * dump - Returns the stack, removing any undefined items.\n   *\n   * @return {Immutable.List}  the stack.\n   */\n  dump () {\n    return this.stack.filter(item => item);\n  }\n\n  /**\n   * dumpWhen - adds a test function to the stack that will run whenever\n   * new state is added to the stack. The test function takes the state\n   * as an argument and returns a boolean. If the test function returns\n   * true, it will then run the callback function, passing the current\n   * stack as an argument.\n   *\n   * @param  {function} testFn takes state as an argument and returns a boolean.\n   * @param  {function} callbackFn takes the current stack as an argument\n   */\n  dumpWhen (testFn, callbackFn) {\n    this.testFn = testFn;\n    this.dumpWhenCb = callbackFn;\n  }\n\n  /**\n   * dumpToLog - When dumpToLog is called, it logs out the current stack to\n   * the console, formatting the different types of items in the stack for\n   * clarity. It takes an optional array for only logging a particular\n   * part of the state objects.\n   *\n   * @param  {array} stateAccessor takes an array of strings for logging only a certain part of the state\n   */\n  dumpToLog (stateAccessor) {\n    const toLog = {\n      ACTION: item => console.log('%cACTION ' + '%c'+item.get('name') + '\\n',\n                                  'font-weight: bold; color: #629456', 'font-style: italic; color: #004',\n                                  item.get('args')),\n      LOG: item => console.log('%cLOG\\n' + item.get('text'), 'background: #eee; color: #555'),\n      TRANSFORMER: item => console.log('%cTRANSFORMER ' + '%c' + item.get('name') + '\\n',\n                                       'font-weight: bold; color: #D08A10', 'font-style: italic; color: #004',\n                                       item.get('args')),\n      STATE: (item, stateAccessor = []) => console.log('%cSTATE ' + (item.streamType ? '(' + item.streamType + ')' : '') + '%c' + item.get('name') + '\\n',\n                                            'font-weight: bold; color: #3B74C4', 'font-style: italic; color: #004',\n                                            item.getIn(['state'].concat(stateAccessor)).toJS())\n    };\n\n    if (this.debug) {\n      this.stack.map(item => {\n        if(item){\n          toLog[item.get('type')](item, stateAccessor);\n        }\n      });\n    }\n  }\n\n  /**\n   * set size - sets the size of the stack.\n   *\n   * @access public\n   * @param  {number} newSize new size for the stack.\n   */\n  set size(newSize) {\n    this.stack.setSize(newSize);\n  }\n\n  /**\n   * get size - getter for returning the current size of the stack.\n   *\n   * @return {number}  returns size of the stack\n   */\n  get size() {\n    return this.stack.size;\n  }\n}\n\nexport default Stack;\n"
   },
   {
-    "__docId__": 13,
+    "__docId__": 19,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -249,46 +387,55 @@
     "export": true,
     "importPath": "protonic/src/stack.js",
     "importStyle": "Stack",
-    "description": "A Stack isn't a stream, but can be used in conjunction with streams, actions, and\ntransformers to make debugging much easier.",
-    "lineNumber": 8,
+    "description": "A Stack isn't a stream, but can be used in conjunction with streams, actions, and\ntransformers to make debugging much easier. Using `pushAction`, 'pushState`,\n`pushTransformer`, and `pushLog`, you can create a log of state changes and\ntheir causes. Calling `dump`, `dumpToLog`, and `dumpWhen` will give you control\nover when to view to stack.",
+    "lineNumber": 11,
     "interface": false
   },
   {
-    "__docId__": 14,
+    "__docId__": 20,
     "kind": "constructor",
     "static": false,
     "variation": null,
     "name": "constructor",
     "memberof": "src/stack.js~Stack",
     "longname": "src/stack.js~Stack#constructor",
-    "access": null,
-    "description": null,
-    "lineNumber": 9,
-    "undocument": true,
+    "access": "public",
+    "description": "constructor - A stack takes a size for the stack and a boolean to determine\nwhether the stack should be enabled on creation.",
+    "lineNumber": 22,
     "params": [
       {
-        "name": "size",
-        "optional": true,
+        "nullable": null,
         "types": [
           "number"
         ],
-        "defaultRaw": 20,
-        "defaultValue": "20"
+        "spread": false,
+        "optional": false,
+        "name": "size",
+        "description": "= 20     The size of the stack."
       },
       {
-        "name": "debug",
-        "optional": true,
+        "nullable": null,
         "types": [
           "boolean"
         ],
-        "defaultRaw": false,
-        "defaultValue": "false"
+        "spread": false,
+        "optional": false,
+        "name": "debug",
+        "description": "= false description"
       }
     ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Stack"
+      ],
+      "spread": false,
+      "description": "description"
+    },
     "generator": false
   },
   {
-    "__docId__": 15,
+    "__docId__": 21,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -297,7 +444,7 @@
     "longname": "src/stack.js~Stack#stack",
     "access": null,
     "description": null,
-    "lineNumber": 10,
+    "lineNumber": 23,
     "undocument": true,
     "type": {
       "types": [
@@ -306,7 +453,7 @@
     }
   },
   {
-    "__docId__": 16,
+    "__docId__": 22,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -315,7 +462,7 @@
     "longname": "src/stack.js~Stack#debug",
     "access": null,
     "description": null,
-    "lineNumber": 11,
+    "lineNumber": 24,
     "undocument": true,
     "type": {
       "types": [
@@ -324,29 +471,32 @@
     }
   },
   {
-    "__docId__": 17,
+    "__docId__": 23,
     "kind": "method",
     "static": false,
     "variation": null,
     "name": "addToStack",
     "memberof": "src/stack.js~Stack",
     "longname": "src/stack.js~Stack#addToStack",
-    "access": null,
-    "description": null,
-    "lineNumber": 14,
-    "undocument": true,
+    "access": "private",
+    "description": "addToStack - Removes the oldest item from the stack,\nand adds a new item to the stack.",
+    "lineNumber": 34,
     "params": [
       {
-        "name": "item",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Immutable.Map"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "item",
+        "description": "The new item to add to the stack."
       }
     ],
     "generator": false
   },
   {
-    "__docId__": 18,
+    "__docId__": 24,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -355,7 +505,7 @@
     "longname": "src/stack.js~Stack#stack",
     "access": null,
     "description": null,
-    "lineNumber": 16,
+    "lineNumber": 36,
     "undocument": true,
     "type": {
       "types": [
@@ -364,97 +514,122 @@
     }
   },
   {
-    "__docId__": 19,
+    "__docId__": 25,
     "kind": "method",
     "static": false,
     "variation": null,
     "name": "pushAction",
     "memberof": "src/stack.js~Stack",
     "longname": "src/stack.js~Stack#pushAction",
-    "access": null,
-    "description": null,
-    "lineNumber": 20,
-    "undocument": true,
+    "access": "public",
+    "description": "pushAction - Adds an action to the stack.",
+    "lineNumber": 47,
     "params": [
       {
-        "name": "fn",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "fnName",
+        "description": "Name of the action called."
       },
       {
-        "name": "args",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "args",
+        "description": "Arguments to the action called."
       }
     ],
     "generator": false
   },
   {
-    "__docId__": 20,
+    "__docId__": 26,
     "kind": "method",
     "static": false,
     "variation": null,
     "name": "pushState",
     "memberof": "src/stack.js~Stack",
     "longname": "src/stack.js~Stack#pushState",
-    "access": null,
-    "description": null,
-    "lineNumber": 24,
-    "undocument": true,
+    "access": "public",
+    "description": "pushState - Adds a state Map to the stack.",
+    "lineNumber": 59,
     "params": [
       {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "name",
-        "types": [
-          "*"
-        ]
+        "description": "Name of the stream that's adding state"
       },
       {
+        "nullable": null,
+        "types": [
+          "Immutable.Map"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "state",
-        "types": [
-          "*"
-        ]
+        "description": "The state object to add to the stack."
       },
       {
-        "name": "streamType",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "streamType",
+        "description": "The type of stream (View, Funnel, Stream) adding the state."
       }
     ],
     "generator": false
   },
   {
-    "__docId__": 21,
+    "__docId__": 27,
     "kind": "method",
     "static": false,
     "variation": null,
     "name": "pushTransformer",
     "memberof": "src/stack.js~Stack",
     "longname": "src/stack.js~Stack#pushTransformer",
-    "access": null,
-    "description": null,
-    "lineNumber": 31,
-    "undocument": true,
+    "access": "public",
+    "description": "pushTransformer - Adds a transformer to the stack.",
+    "lineNumber": 73,
     "params": [
       {
-        "name": "fn",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "fnName",
+        "description": "Name of the transformer called."
       },
       {
-        "name": "args",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "args",
+        "description": "Arguments to the transformer called."
       }
     ],
     "generator": false
   },
   {
-    "__docId__": 22,
+    "__docId__": 28,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -462,21 +637,24 @@
     "memberof": "src/stack.js~Stack",
     "longname": "src/stack.js~Stack#pushLog",
     "access": null,
-    "description": null,
-    "lineNumber": 35,
-    "undocument": true,
+    "description": "pushLog - Adds a text log to the stack.",
+    "lineNumber": 82,
     "params": [
       {
-        "name": "text",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "text",
+        "description": "The text to be added to the stack."
       }
     ],
     "generator": false
   },
   {
-    "__docId__": 23,
+    "__docId__": 29,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -484,19 +662,21 @@
     "memberof": "src/stack.js~Stack",
     "longname": "src/stack.js~Stack#dump",
     "access": null,
-    "description": null,
-    "lineNumber": 39,
-    "undocument": true,
+    "description": "dump - Returns the stack, removing any undefined items.",
+    "lineNumber": 91,
     "params": [],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Immutable.List"
+      ],
+      "spread": false,
+      "description": "the stack."
     },
     "generator": false
   },
   {
-    "__docId__": 24,
+    "__docId__": 30,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -504,27 +684,34 @@
     "memberof": "src/stack.js~Stack",
     "longname": "src/stack.js~Stack#dumpWhen",
     "access": null,
-    "description": null,
-    "lineNumber": 43,
-    "undocument": true,
+    "description": "dumpWhen - adds a test function to the stack that will run whenever\nnew state is added to the stack. The test function takes the state\nas an argument and returns a boolean. If the test function returns\ntrue, it will then run the callback function, passing the current\nstack as an argument.",
+    "lineNumber": 105,
     "params": [
       {
-        "name": "testFn",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "testFn",
+        "description": "takes state as an argument and returns a boolean."
       },
       {
-        "name": "dumpFn",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "callbackFn",
+        "description": "takes the current stack as an argument"
       }
     ],
     "generator": false
   },
   {
-    "__docId__": 25,
+    "__docId__": 31,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -533,7 +720,7 @@
     "longname": "src/stack.js~Stack#testFn",
     "access": null,
     "description": null,
-    "lineNumber": 44,
+    "lineNumber": 106,
     "undocument": true,
     "type": {
       "types": [
@@ -542,7 +729,7 @@
     }
   },
   {
-    "__docId__": 26,
+    "__docId__": 32,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -551,7 +738,7 @@
     "longname": "src/stack.js~Stack#dumpWhenCb",
     "access": null,
     "description": null,
-    "lineNumber": 45,
+    "lineNumber": 107,
     "undocument": true,
     "type": {
       "types": [
@@ -560,7 +747,7 @@
     }
   },
   {
-    "__docId__": 27,
+    "__docId__": 33,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -568,31 +755,45 @@
     "memberof": "src/stack.js~Stack",
     "longname": "src/stack.js~Stack#dumpToLog",
     "access": null,
-    "description": null,
-    "lineNumber": 48,
-    "undocument": true,
+    "description": "dumpToLog - When dumpToLog is called, it logs out the current stack to\nthe console, formatting the different types of items in the stack for\nclarity. It takes an optional array for only logging a particular\npart of the state objects.",
+    "lineNumber": 118,
     "params": [
       {
-        "name": "stateAccessor",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "stateAccessor",
+        "description": "takes an array of strings for logging only a certain part of the state"
       }
     ],
     "generator": false
   },
   {
-    "__docId__": 28,
+    "__docId__": 34,
     "kind": "set",
     "static": false,
     "variation": null,
     "name": "size",
     "memberof": "src/stack.js~Stack",
     "longname": "src/stack.js~Stack#size",
-    "access": null,
-    "description": null,
-    "lineNumber": 71,
-    "undocument": true,
+    "access": "public",
+    "description": "set size - sets the size of the stack.",
+    "lineNumber": 147,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "newSize",
+        "description": "new size for the stack."
+      }
+    ],
     "type": {
       "types": [
         "*"
@@ -601,7 +802,7 @@
     "generator": false
   },
   {
-    "__docId__": 29,
+    "__docId__": 35,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -609,9 +810,16 @@
     "memberof": "src/stack.js~Stack",
     "longname": "src/stack.js~Stack#size",
     "access": null,
-    "description": null,
-    "lineNumber": 75,
-    "undocument": true,
+    "description": "get size - getter for returning the current size of the stack.",
+    "lineNumber": 156,
+    "return": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": "returns size of the stack"
+    },
     "type": {
       "types": [
         "*"
@@ -620,7 +828,7 @@
     "generator": false
   },
   {
-    "__docId__": 30,
+    "__docId__": 36,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -630,10 +838,10 @@
     "access": null,
     "description": null,
     "lineNumber": 2,
-    "content": "/** Requires Immutable */\nimport Immutable from 'immutable';\n\n/**\n * A Stream holds the canonical state of a part of an application, and pushes changes to that state\n * to any observers that are subscribed to the Stream.\n *\n */\nclass Stream {\n\n  /**\n   * constructor - When creating a new stream, an initial state is not required, but it is\n   * encouraged. If an initial state is passed in, it should be an Immutable data structure.\n   *\n   * @param  {Immutable} initialState this is the state that the stream will start with.\n   * @return {Stream} Instance of a Stream.\n   */\n  constructor (initialState) {\n    if(initialState && !Immutable.Iterable.isIterable(initialState)) {\n      throw new TypeError('initialState must be immutable');\n    }\n\n    this._state = initialState;\n    this.observers = Immutable.List();\n  }\n\n\n  logStack (name, stack) {\n    this.name = name;\n    this.stack = stack;\n  }\n  /**\n   * subscribe - takes a callback function that is executed any time the stream received _new_\n   * state. The callback should accept `state` as an argument. If the stream currently has state,\n   * it will be passed to the callback immediately upon subscription.\n   *\n   * An observer gets added to an `observers` array. State changes will propagate to any observers\n   * in this array.\n   *\n   * It will return an object (we'll call a _subscriber_) that has an `unsubscribe` method. This\n   * method will remove the observer from the `observers` List and should be called anytime the\n   * observer is done listening to the stream. Failing to do so could cause memory leaks.\n   *\n   * @access public\n   * @param  {function} observer - the callback function to be executed whenever state updates\n   * @return {object}            - a _subscriber_ object with an `unsubscribe` method\n   */\n  subscribe (observer) {\n    this.observers = this.observers.push(observer);\n    if(this._state) { observer(this._state); }\n    return {\n      unsubscribe: () => {\n        const idx = this.observers.indexOf(observer);\n        if (idx >= 0) {\n          this.observers = this.observers.delete(this.observers.indexOf(observer));\n        } else {\n          throw new RangeError('Observer is not subscribed to this stream.');\n        }\n      }\n    };\n  }\n\n  /**\n   * sendState - Gets called whenever the Stream receives _new_ state. `sendState` first updates\n   * the Streams internal `_state` and then each observer in the `observers` List will be called\n   * with the new state as its argument.\n   *\n   * @access private\n   * @param  {Immutable} newState the Stream's new state.\n   */\n  sendState (newState) {\n      this._state = newState;\n      if (this.stack) { this.stack.pushState(this.name, this._state, this.type); }\n      this.observers.forEach(observer => observer(this._state));\n  }\n\n  /**\n   * next - Receives new state (externally, ideally through a transformer) and verifies that the\n   * new state is different from the Stream's current state before passing on to `sendState` (and,\n   * all the observers, by extension).\n   *\n   * @access public\n   * @param  {Immutable} newState\n   */\n  next (newState) {\n    if(!Immutable.is(this._state, newState)){\n      this.sendState(newState);\n    }\n  }\n\n  /**\n   * get state - a getter for returning the current internal state of the Stream.\n   *\n   * @access public\n   * @return {Immutable} - current state contained by the Stream\n   */\n  get state(){\n    return this._state;\n  }\n\n  /**\n   * set state - a setter that's probably more clever than it needs to be. Instead of setting\n   * the internal state, it calls `next`.\n   *\n   * ```javascript\n   * stream.next(newState)\n   * // is functionally the same as\n   * stream.state = newState\n   * ```\n   *\n   * Like I said, maybe too clever, but I thinks allow for a more delarative style when\n   * writing transformers.\n   *\n   * @access public\n   * @param  {type} newState description\n   * @return {type}          description\n   */\n  set state(newState){\n    this.next(newState);\n  }\n}\n\nexport default Stream;\n"
+    "content": "/** Requires Immutable */\nimport Immutable from 'immutable';\n\n/**\n * A Stream holds the canonical state of a part of an application, and pushes changes to that state\n * to any observers that are subscribed to the Stream.\n *\n */\nclass Stream {\n\n  /**\n   * constructor - When creating a new stream, an initial state is not required, but it is\n   * encouraged. If an initial state is passed in, it should be an Immutable data structure.\n   *\n   * @param  {Immutable} initialState this is the state that the stream will start with.\n   * @return {Stream} Instance of a Stream.\n   */\n  constructor (initialState) {\n    if(initialState && !Immutable.Iterable.isIterable(initialState)) {\n      throw new TypeError('initialState must be immutable');\n    }\n\n    this._state = initialState;\n    this.observers = Immutable.List();\n    this.type = 'SOURCE';\n  }\n\n\n  logStack (name, stack) {\n    this.name = name;\n    this.stack = stack;\n  }\n  /**\n   * subscribe - takes a callback function that is executed any time the stream received _new_\n   * state. The callback should accept `state` as an argument. If the stream currently has state,\n   * it will be passed to the callback immediately upon subscription.\n   *\n   * An observer gets added to an `observers` array. State changes will propagate to any observers\n   * in this array.\n   *\n   * It will return an object (we'll call a _subscriber_) that has an `unsubscribe` method. This\n   * method will remove the observer from the `observers` List and should be called anytime the\n   * observer is done listening to the stream. Failing to do so could cause memory leaks.\n   *\n   * @access public\n   * @param  {function} observer - the callback function to be executed whenever state updates\n   * @return {object}            - a _subscriber_ object with an `unsubscribe` method\n   */\n  subscribe (observer) {\n    this.observers = this.observers.push(observer);\n    if(this._state) { observer(this._state); }\n    return {\n      unsubscribe: () => {\n        const idx = this.observers.indexOf(observer);\n        if (idx >= 0) {\n          this.observers = this.observers.delete(this.observers.indexOf(observer));\n        } else {\n          throw new RangeError('Observer is not subscribed to this stream.');\n        }\n      }\n    };\n  }\n\n  /**\n   * sendState - Gets called whenever the Stream receives _new_ state. `sendState` first updates\n   * the Streams internal `_state` and then each observer in the `observers` List will be called\n   * with the new state as its argument.\n   *\n   * @access private\n   * @param  {Immutable} newState the Stream's new state.\n   */\n  sendState (newState) {\n      this._state = newState;\n      if (this.stack) { this.stack.pushState(this.name, this._state, this.type); }\n      this.observers.forEach(observer => observer(this._state));\n  }\n\n  /**\n   * next - Receives new state (externally, ideally through a transformer) and verifies that the\n   * new state is different from the Stream's current state before passing on to `sendState` (and,\n   * all the observers, by extension).\n   *\n   * @access public\n   * @param  {Immutable} newState\n   */\n  next (newState) {\n    if(!Immutable.is(this._state, newState)){\n      this.sendState(newState);\n    }\n  }\n\n  forceState (state) {\n    this._state = state;\n  }\n\n  /**\n   * get state - a getter for returning the current internal state of the Stream.\n   *\n   * @access public\n   * @return {Immutable} - current state contained by the Stream\n   */\n  get state(){\n    return this._state;\n  }\n\n  /**\n   * set state - a setter that's probably more clever than it needs to be. Instead of setting\n   * the internal state, it calls `next`.\n   *\n   * ```javascript\n   * stream.next(newState)\n   * // is functionally the same as\n   * stream.state = newState\n   * ```\n   *\n   * Like I said, maybe too clever, but I thinks allow for a more delarative style when\n   * writing transformers.\n   *\n   * @access public\n   * @param  {type} newState description\n   * @return {type}          description\n   */\n  set state(newState){\n    this.next(newState);\n  }\n}\n\nexport default Stream;\n"
   },
   {
-    "__docId__": 31,
+    "__docId__": 37,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -649,7 +857,7 @@
     "interface": false
   },
   {
-    "__docId__": 32,
+    "__docId__": 38,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -682,7 +890,7 @@
     "generator": false
   },
   {
-    "__docId__": 33,
+    "__docId__": 39,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -700,7 +908,7 @@
     }
   },
   {
-    "__docId__": 34,
+    "__docId__": 40,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -718,7 +926,25 @@
     }
   },
   {
-    "__docId__": 35,
+    "__docId__": 41,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "type",
+    "memberof": "src/stream.js~Stream",
+    "longname": "src/stream.js~Stream#type",
+    "access": null,
+    "description": null,
+    "lineNumber": 25,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 42,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -727,7 +953,7 @@
     "longname": "src/stream.js~Stream#logStack",
     "access": null,
     "description": null,
-    "lineNumber": 28,
+    "lineNumber": 29,
     "undocument": true,
     "params": [
       {
@@ -746,31 +972,13 @@
     "generator": false
   },
   {
-    "__docId__": 36,
+    "__docId__": 43,
     "kind": "member",
     "static": false,
     "variation": null,
     "name": "name",
     "memberof": "src/stream.js~Stream",
     "longname": "src/stream.js~Stream#name",
-    "access": null,
-    "description": null,
-    "lineNumber": 29,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 37,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "stack",
-    "memberof": "src/stream.js~Stream",
-    "longname": "src/stream.js~Stream#stack",
     "access": null,
     "description": null,
     "lineNumber": 30,
@@ -782,7 +990,25 @@
     }
   },
   {
-    "__docId__": 38,
+    "__docId__": 44,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "stack",
+    "memberof": "src/stream.js~Stream",
+    "longname": "src/stream.js~Stream#stack",
+    "access": null,
+    "description": null,
+    "lineNumber": 31,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 45,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -791,7 +1017,7 @@
     "longname": "src/stream.js~Stream#subscribe",
     "access": "public",
     "description": "subscribe - takes a callback function that is executed any time the stream received _new_\nstate. The callback should accept `state` as an argument. If the stream currently has state,\nit will be passed to the callback immediately upon subscription.\n\nAn observer gets added to an `observers` array. State changes will propagate to any observers\nin this array.\n\nIt will return an object (we'll call a _subscriber_) that has an `unsubscribe` method. This\nmethod will remove the observer from the `observers` List and should be called anytime the\nobserver is done listening to the stream. Failing to do so could cause memory leaks.",
-    "lineNumber": 48,
+    "lineNumber": 49,
     "params": [
       {
         "nullable": null,
@@ -815,7 +1041,7 @@
     "generator": false
   },
   {
-    "__docId__": 39,
+    "__docId__": 46,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -824,7 +1050,7 @@
     "longname": "src/stream.js~Stream#observers",
     "access": null,
     "description": null,
-    "lineNumber": 49,
+    "lineNumber": 50,
     "undocument": true,
     "type": {
       "types": [
@@ -833,7 +1059,7 @@
     }
   },
   {
-    "__docId__": 40,
+    "__docId__": 47,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -842,7 +1068,7 @@
     "longname": "src/stream.js~Stream#observers",
     "access": null,
     "description": null,
-    "lineNumber": 55,
+    "lineNumber": 56,
     "undocument": true,
     "type": {
       "types": [
@@ -851,7 +1077,7 @@
     }
   },
   {
-    "__docId__": 41,
+    "__docId__": 48,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -860,7 +1086,7 @@
     "longname": "src/stream.js~Stream#sendState",
     "access": "private",
     "description": "sendState - Gets called whenever the Stream receives _new_ state. `sendState` first updates\nthe Streams internal `_state` and then each observer in the `observers` List will be called\nwith the new state as its argument.",
-    "lineNumber": 71,
+    "lineNumber": 72,
     "params": [
       {
         "nullable": null,
@@ -876,7 +1102,7 @@
     "generator": false
   },
   {
-    "__docId__": 42,
+    "__docId__": 49,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -885,7 +1111,7 @@
     "longname": "src/stream.js~Stream#_state",
     "access": null,
     "description": null,
-    "lineNumber": 72,
+    "lineNumber": 73,
     "undocument": true,
     "type": {
       "types": [
@@ -894,7 +1120,7 @@
     }
   },
   {
-    "__docId__": 43,
+    "__docId__": 50,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -903,7 +1129,7 @@
     "longname": "src/stream.js~Stream#next",
     "access": "public",
     "description": "next - Receives new state (externally, ideally through a transformer) and verifies that the\nnew state is different from the Stream's current state before passing on to `sendState` (and,\nall the observers, by extension).",
-    "lineNumber": 85,
+    "lineNumber": 86,
     "params": [
       {
         "nullable": null,
@@ -919,7 +1145,47 @@
     "generator": false
   },
   {
-    "__docId__": 44,
+    "__docId__": 51,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "forceState",
+    "memberof": "src/stream.js~Stream",
+    "longname": "src/stream.js~Stream#forceState",
+    "access": null,
+    "description": null,
+    "lineNumber": 92,
+    "undocument": true,
+    "params": [
+      {
+        "name": "state",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 52,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_state",
+    "memberof": "src/stream.js~Stream",
+    "longname": "src/stream.js~Stream#_state",
+    "access": null,
+    "description": null,
+    "lineNumber": 93,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 53,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -928,7 +1194,7 @@
     "longname": "src/stream.js~Stream#state",
     "access": "public",
     "description": "get state - a getter for returning the current internal state of the Stream.",
-    "lineNumber": 97,
+    "lineNumber": 102,
     "return": {
       "nullable": null,
       "types": [
@@ -945,7 +1211,7 @@
     "generator": false
   },
   {
-    "__docId__": 45,
+    "__docId__": 54,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -954,7 +1220,7 @@
     "longname": "src/stream.js~Stream#state",
     "access": "public",
     "description": "set state - a setter that's probably more clever than it needs to be. Instead of setting\nthe internal state, it calls `next`.\n\n```javascript\nstream.next(newState)\n// is functionally the same as\nstream.state = newState\n```\n\nLike I said, maybe too clever, but I thinks allow for a more delarative style when\nwriting transformers.",
-    "lineNumber": 118,
+    "lineNumber": 123,
     "params": [
       {
         "nullable": null,
@@ -983,7 +1249,7 @@
     "generator": false
   },
   {
-    "__docId__": 46,
+    "__docId__": 55,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -993,10 +1259,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import Stream from './stream';\n\n/**\n * A View is a kind of Stream the that caches particular a shape of state.\n *\n * @extends Stream\n */\nclass View extends Stream {\n  constructor (source, viewFn) {\n    super();\n\n    this.source = source;\n    this.sourceSubscriber = source.subscribe( state => this.next(viewFn(state)) );\n  }\n\n  destroy () {\n    this.sourceSubscriber.unsubscribe();\n  }\n}\n\nexport default View;\n"
+    "content": "import Stream from './stream';\n\n/**\n * A View is a kind of Stream that is useful for transforming the shape of state for\n * use in components or interfaces. A View caches the result of the function, and will\n * only emit state to subscribers if the new return value is distinct from the\n * previous value.\n *\n * @extends Stream\n */\nclass View extends Stream {\n\n  /**\n   * constructor - Takes a source stream, and transforms it through a function.\n   * The view function takes state from the source stream and transforms it into\n   * returns a new shape of the state for use in a component or interface.\n   *\n   * @access public\n   * @param  {Stream} source A stream to receive state from (can be a source stream or a funnel)\n   * @param  {function} viewFn A function that takes state and returns a new shape for the state.\n   * @returns {View}\n   */\n  constructor (source, viewFn) {\n    if (!source || !(source instanceof Stream)) {\n      throw new Error('Views require a source stream.');\n    }\n\n    if (!viewFn || (typeof viewFn !== 'function')) {\n      throw new Error('Views require a view function.');\n    }\n\n    super();\n\n    this.source = source;\n    this.sourceSubscriber = source.subscribe( state => this.next(viewFn(state)) );\n    this.type = 'VIEW';\n  }\n\n  /**\n   * forceState - Overrides the base Stream class's forceState.\n   * A View cannot receive new state through forceState.\n   * @access private\n   * @return {type}  description\n   */\n  forceState () {\n    throw new Error('Cannot force state on a View.')\n  }\n\n  /**\n   * destroy - Clean up subscriptions.\n   *\n   * @access public\n   * @return {type}  description\n   */\n  destroy () {\n    this.sourceSubscriber.unsubscribe();\n  }\n}\n\nexport default View;\n"
   },
   {
-    "__docId__": 47,
+    "__docId__": 56,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -1007,43 +1273,64 @@
     "export": true,
     "importPath": "protonic/src/view.js",
     "importStyle": "View",
-    "description": "A View is a kind of Stream the that caches particular a shape of state.",
-    "lineNumber": 8,
+    "description": "A View is a kind of Stream that is useful for transforming the shape of state for\nuse in components or interfaces. A View caches the result of the function, and will\nonly emit state to subscribers if the new return value is distinct from the\nprevious value.",
+    "lineNumber": 11,
     "interface": false,
     "extends": [
       "*"
     ]
   },
   {
-    "__docId__": 48,
+    "__docId__": 57,
     "kind": "constructor",
     "static": false,
     "variation": null,
     "name": "constructor",
     "memberof": "src/view.js~View",
     "longname": "src/view.js~View#constructor",
-    "access": null,
-    "description": null,
-    "lineNumber": 9,
-    "undocument": true,
-    "params": [
+    "access": "public",
+    "description": "constructor - Takes a source stream, and transforms it through a function.\nThe view function takes state from the source stream and transforms it into\nreturns a new shape of the state for use in a component or interface.",
+    "lineNumber": 23,
+    "unknown": [
       {
-        "name": "source",
-        "types": [
-          "*"
-        ]
-      },
-      {
-        "name": "viewFn",
-        "types": [
-          "*"
-        ]
+        "tagName": "@returns",
+        "tagValue": "{View}"
       }
     ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Stream"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "source",
+        "description": "A stream to receive state from (can be a source stream or a funnel)"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "viewFn",
+        "description": "A function that takes state and returns a new shape for the state."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "View"
+      ],
+      "spread": false,
+      "description": ""
+    },
     "generator": false
   },
   {
-    "__docId__": 49,
+    "__docId__": 58,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1052,7 +1339,7 @@
     "longname": "src/view.js~View#source",
     "access": null,
     "description": null,
-    "lineNumber": 12,
+    "lineNumber": 34,
     "undocument": true,
     "type": {
       "types": [
@@ -1061,7 +1348,7 @@
     }
   },
   {
-    "__docId__": 50,
+    "__docId__": 59,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1070,7 +1357,7 @@
     "longname": "src/view.js~View#sourceSubscriber",
     "access": null,
     "description": null,
-    "lineNumber": 13,
+    "lineNumber": 35,
     "undocument": true,
     "type": {
       "types": [
@@ -1079,22 +1366,69 @@
     }
   },
   {
-    "__docId__": 51,
+    "__docId__": 60,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "type",
+    "memberof": "src/view.js~View",
+    "longname": "src/view.js~View#type",
+    "access": null,
+    "description": null,
+    "lineNumber": 36,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 61,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "forceState",
+    "memberof": "src/view.js~View",
+    "longname": "src/view.js~View#forceState",
+    "access": "private",
+    "description": "forceState - Overrides the base Stream class's forceState.\nA View cannot receive new state through forceState.",
+    "lineNumber": 45,
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "type"
+      ],
+      "spread": false,
+      "description": "description"
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 62,
     "kind": "method",
     "static": false,
     "variation": null,
     "name": "destroy",
     "memberof": "src/view.js~View",
     "longname": "src/view.js~View#destroy",
-    "access": null,
-    "description": null,
-    "lineNumber": 16,
-    "undocument": true,
+    "access": "public",
+    "description": "destroy - Clean up subscriptions.",
+    "lineNumber": 55,
     "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "type"
+      ],
+      "spread": false,
+      "description": "description"
+    },
     "generator": false
   },
   {
-    "__docId__": 53,
+    "__docId__": 64,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1107,7 +1441,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 54,
+    "__docId__": 65,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1120,7 +1454,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 55,
+    "__docId__": 66,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1133,7 +1467,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 56,
+    "__docId__": 67,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1146,7 +1480,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 57,
+    "__docId__": 68,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1159,7 +1493,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 58,
+    "__docId__": 69,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1172,7 +1506,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 59,
+    "__docId__": 70,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1185,7 +1519,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 60,
+    "__docId__": 71,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1198,7 +1532,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 61,
+    "__docId__": 72,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1211,7 +1545,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 62,
+    "__docId__": 73,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1224,7 +1558,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 63,
+    "__docId__": 74,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1237,7 +1571,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 64,
+    "__docId__": 75,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1250,7 +1584,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 65,
+    "__docId__": 76,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1263,7 +1597,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 66,
+    "__docId__": 77,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1276,7 +1610,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 67,
+    "__docId__": 78,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1289,7 +1623,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 68,
+    "__docId__": 79,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1302,7 +1636,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 69,
+    "__docId__": 80,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1315,7 +1649,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 70,
+    "__docId__": 81,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1328,7 +1662,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 71,
+    "__docId__": 82,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1341,7 +1675,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 72,
+    "__docId__": 83,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1354,7 +1688,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 73,
+    "__docId__": 84,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1367,7 +1701,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 74,
+    "__docId__": 85,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1380,7 +1714,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 75,
+    "__docId__": 86,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1393,7 +1727,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 76,
+    "__docId__": 87,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1406,7 +1740,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 77,
+    "__docId__": 88,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1419,7 +1753,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 78,
+    "__docId__": 89,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1432,7 +1766,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 79,
+    "__docId__": 90,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1445,7 +1779,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 80,
+    "__docId__": 91,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1458,7 +1792,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 81,
+    "__docId__": 92,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1471,7 +1805,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 82,
+    "__docId__": 93,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1484,7 +1818,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 83,
+    "__docId__": 94,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1497,7 +1831,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 84,
+    "__docId__": 95,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1510,7 +1844,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 85,
+    "__docId__": 96,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1523,7 +1857,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 86,
+    "__docId__": 97,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1536,7 +1870,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 87,
+    "__docId__": 98,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1549,7 +1883,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 88,
+    "__docId__": 99,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1562,7 +1896,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 89,
+    "__docId__": 100,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1575,7 +1909,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 90,
+    "__docId__": 101,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1588,7 +1922,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 91,
+    "__docId__": 102,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1601,7 +1935,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 92,
+    "__docId__": 103,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1614,7 +1948,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 93,
+    "__docId__": 104,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1627,7 +1961,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 94,
+    "__docId__": 105,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1640,7 +1974,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 95,
+    "__docId__": 106,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1653,7 +1987,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 96,
+    "__docId__": 107,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1666,7 +2000,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 97,
+    "__docId__": 108,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1679,7 +2013,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 98,
+    "__docId__": 109,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1692,7 +2026,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 99,
+    "__docId__": 110,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1705,7 +2039,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 101,
+    "__docId__": 112,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1718,7 +2052,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 102,
+    "__docId__": 113,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1731,7 +2065,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 103,
+    "__docId__": 114,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1744,7 +2078,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 104,
+    "__docId__": 115,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1757,7 +2091,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 105,
+    "__docId__": 116,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1770,7 +2104,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 106,
+    "__docId__": 117,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1783,7 +2117,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 107,
+    "__docId__": 118,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1796,7 +2130,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 108,
+    "__docId__": 119,
     "kind": "external",
     "static": true,
     "variation": null,
