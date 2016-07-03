@@ -11,7 +11,7 @@ describe('Funnel Stream', () => {
     beforeEach(() => {
       testStream1 = new Stream();
       testStream2 = new Stream();
-      testView = new View(testStream1);
+      testView = new View(testStream1, state => state);
     })
 
     it('Should require a Stream Map when initializing.', () => {

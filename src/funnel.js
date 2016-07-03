@@ -15,6 +15,7 @@ class Funnel extends Stream {
    * the combined state. The key for each stream will be the key used to access the state of
    * that stream on the combined state object.
    *
+   * @access public
    * @param  {Immutable.Map} sourceMap - a Map of the feeder streams.
    * @return {Funnel}           returns an instance of the Funnel stream.
    */
@@ -64,6 +65,14 @@ class Funnel extends Stream {
     }
   }
 
+  /**
+   * subscribe - Overwrites base Stream class's subscribe method.
+   * Funnels should not emit state to subscribers until all source
+   * streams have defined state.
+   *
+   * @param  {type} observer description
+   * @return {type}          description
+   */
   subscribe (observer) {
     this.observers = this.observers.push(observer);
     if(this.primed) { observer(this._state); }
@@ -79,6 +88,15 @@ class Funnel extends Stream {
     };
   }
 
+  /**
+   * forceState - Funnels can accept new state an send state back up
+   * the subscription chain. This should only be used in cases of
+   * restoring state.
+   *
+   * @access public
+   * @param  {type} state description
+   * @return {type}       description
+   */
   forceState (state) {
     this.sourceMap.forEach((sourceStream, key) => {
       sourceStream.forceState(state.get(key));
