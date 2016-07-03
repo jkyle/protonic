@@ -378,12 +378,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/funnel.js~funnel#state",
-    "class/src/funnel.js~Funnel.html#instance-member-state",
-    "src/funnel.js~Funnel#state",
-    "member"
-  ],
-  [
     "src/funnel.js~funnel#subscribe",
     "class/src/funnel.js~Funnel.html#instance-method-subscribe",
     "src/funnel.js~Funnel#subscribe",
@@ -432,12 +426,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/stack.js~stack#dumpwhencb",
-    "class/src/stack.js~Stack.html#instance-member-dumpWhenCb",
-    "src/stack.js~Stack#dumpWhenCb",
-    "member"
-  ],
-  [
     "src/stack.js~stack#pushaction",
     "class/src/stack.js~Stack.html#instance-method-pushAction",
     "src/stack.js~Stack#pushAction",
@@ -474,12 +462,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/stack.js~stack#testfn",
-    "class/src/stack.js~Stack.html#instance-member-testFn",
-    "src/stack.js~Stack#testFn",
-    "member"
-  ],
-  [
     "src/stream.js",
     "file/src/stream.js.html",
     "src/stream.js",
@@ -511,13 +493,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/stream.js~stream#state",
-    "class/src/stream.js~Stream.html#instance-set-state",
+    "class/src/stream.js~Stream.html#instance-get-state",
     "src/stream.js~Stream#state",
     "member"
   ],
   [
     "src/stream.js~stream#state",
-    "class/src/stream.js~Stream.html#instance-get-state",
+    "class/src/stream.js~Stream.html#instance-set-state",
     "src/stream.js~Stream#state",
     "member"
   ],

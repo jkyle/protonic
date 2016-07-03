@@ -17,7 +17,7 @@ class Stack {
    * @access public
    * @param  {number} size = 20     The size of the stack.
    * @param  {boolean} debug = false
-   * @return {Stack}               
+   * @return {Stack}
    */
   constructor (size = 20, debug = false) {
 
@@ -112,7 +112,15 @@ class Stack {
    * @param  {function} callbackFn takes the current stack as an argument
    */
   dumpWhen (testFn, callbackFn) {
+
+    /**
+     * @access private
+     */
     this.testFn = testFn;
+
+    /**
+     * @access = private
+     */
     this.dumpWhenCb = callbackFn;
   }
 

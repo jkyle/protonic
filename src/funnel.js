@@ -53,6 +53,10 @@ class Funnel extends Stream {
       }
 
       return sourceStream.subscribe(newState => {
+
+        /**
+         * @ignore
+         */
         this.state = this.state.set(key, newState);
       });
     });
@@ -97,7 +101,7 @@ class Funnel extends Stream {
   subscribe (observer) {
 
     /**
-     * @ignore    
+     * @ignore
      */
     this.observers = this.observers.push(observer);
     if(this.primed) { observer(this._state); }
