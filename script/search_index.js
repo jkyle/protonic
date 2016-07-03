@@ -372,6 +372,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/funnel.js~funnel#forcestate",
+    "class/src/funnel.js~Funnel.html#instance-method-forceState",
+    "src/funnel.js~Funnel#forceState",
+    "method"
+  ],
+  [
+    "src/funnel.js~funnel#observers",
+    "class/src/funnel.js~Funnel.html#instance-member-observers",
+    "src/funnel.js~Funnel#observers",
+    "member"
+  ],
+  [
     "src/funnel.js~funnel#primed",
     "class/src/funnel.js~Funnel.html#instance-member-primed",
     "src/funnel.js~Funnel#primed",
@@ -384,15 +396,33 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/funnel.js~funnel#sourcemap",
+    "class/src/funnel.js~Funnel.html#instance-member-sourceMap",
+    "src/funnel.js~Funnel#sourceMap",
+    "member"
+  ],
+  [
     "src/funnel.js~funnel#state",
     "class/src/funnel.js~Funnel.html#instance-member-state",
     "src/funnel.js~Funnel#state",
     "member"
   ],
   [
+    "src/funnel.js~funnel#subscribe",
+    "class/src/funnel.js~Funnel.html#instance-method-subscribe",
+    "src/funnel.js~Funnel#subscribe",
+    "method"
+  ],
+  [
     "src/funnel.js~funnel#subscribers",
     "class/src/funnel.js~Funnel.html#instance-member-subscribers",
     "src/funnel.js~Funnel#subscribers",
+    "member"
+  ],
+  [
+    "src/funnel.js~funnel#type",
+    "class/src/funnel.js~Funnel.html#instance-member-type",
+    "src/funnel.js~Funnel#type",
     "member"
   ],
   [
@@ -406,12 +436,6 @@ window.esdocSearchIndex = [
     "file/src/stack.js.html",
     "src/stack.js",
     "file"
-  ],
-  [
-    "src/stack.js~stack#addtostack",
-    "class/src/stack.js~Stack.html#instance-method-addToStack",
-    "src/stack.js~Stack#addToStack",
-    "method"
   ],
   [
     "src/stack.js~stack#constructor",
@@ -510,6 +534,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/stream.js~stream#forcestate",
+    "class/src/stream.js~Stream.html#instance-method-forceState",
+    "src/stream.js~Stream#forceState",
+    "method"
+  ],
+  [
     "src/stream.js~stream#logstack",
     "class/src/stream.js~Stream.html#instance-method-logStack",
     "src/stream.js~Stream#logStack",
@@ -541,13 +571,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/stream.js~stream#state",
-    "class/src/stream.js~Stream.html#instance-get-state",
+    "class/src/stream.js~Stream.html#instance-set-state",
     "src/stream.js~Stream#state",
     "member"
   ],
   [
     "src/stream.js~stream#state",
-    "class/src/stream.js~Stream.html#instance-set-state",
+    "class/src/stream.js~Stream.html#instance-get-state",
     "src/stream.js~Stream#state",
     "member"
   ],
@@ -556,6 +586,12 @@ window.esdocSearchIndex = [
     "class/src/stream.js~Stream.html#instance-method-subscribe",
     "src/stream.js~Stream#subscribe",
     "method"
+  ],
+  [
+    "src/stream.js~stream#type",
+    "class/src/stream.js~Stream.html#instance-member-type",
+    "src/stream.js~Stream#type",
+    "member"
   ],
   [
     "src/view.js",
@@ -585,6 +621,12 @@ window.esdocSearchIndex = [
     "src/view.js~view#sourcesubscriber",
     "class/src/view.js~View.html#instance-member-sourceSubscriber",
     "src/view.js~View#sourceSubscriber",
+    "member"
+  ],
+  [
+    "src/view.js~view#type",
+    "class/src/view.js~View.html#instance-member-type",
+    "src/view.js~View#type",
     "member"
   ]
 ]

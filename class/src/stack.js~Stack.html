@@ -41,13 +41,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Stack from &apos;<span><a href="file/src/stack.js.html#lineNumber8">protonic/src/stack.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Stack from &apos;<span><a href="file/src/stack.js.html#lineNumber11">protonic/src/stack.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/stack.js.html#lineNumber8">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/stack.js.html#lineNumber11">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -68,7 +68,9 @@
   
   
   <div class="description" data-ice="description"><p>A Stack isn&apos;t a stream, but can be used in conjunction with streams, actions, and
-transformers to make debugging much easier.</p>
+transformers to make debugging much easier. Using <code>pushAction</code>, &apos;pushState<code>,</code>pushTransformer<code>, and</code>pushLog<code>, you can create a log of state changes and
+their causes. Calling</code>dump<code>,</code>dumpToLog<code>, and</code>dumpWhen` will give you control
+over when to view to stack.</p>
 </div>
 
   
@@ -97,13 +99,15 @@ transformers to make debugging much easier.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(size: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, debug: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>)</span>
+           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(size: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, debug: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>): <span><a href="class/src/stack.js~Stack.html">Stack</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>constructor - A stack takes a size for the stack and a boolean to determine
+whether the stack should be enabled on creation.</p>
+</div>
       </div>
     </td>
     <td>
@@ -179,13 +183,14 @@ transformers to make debugging much easier.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-set-size">size</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-set-size">size</a></span></span><span data-ice="signature">(newSize: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>): <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>set size - sets the size of the stack.</p>
+</div>
       </div>
     </td>
     <td>
@@ -204,13 +209,14 @@ transformers to make debugging much easier.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-get-size">size</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-get-size">size</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>get size - getter for returning the current size of the stack.</p>
+</div>
       </div>
     </td>
     <td>
@@ -286,13 +292,14 @@ transformers to make debugging much easier.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-addToStack">addToStack</a></span></span><span data-ice="signature">(item: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-dump">dump</a></span></span><span data-ice="signature">(): <span>Immutable.List</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>dump - Returns the stack, removing any undefined items.</p>
+</div>
       </div>
     </td>
     <td>
@@ -311,13 +318,16 @@ transformers to make debugging much easier.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-dump">dump</a></span></span><span data-ice="signature">(): <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-dumpToLog">dumpToLog</a></span></span><span data-ice="signature">(stateAccessor: <span>array</span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>dumpToLog - When dumpToLog is called, it logs out the current stack to
+the console, formatting the different types of items in the stack for
+clarity.</p>
+</div>
       </div>
     </td>
     <td>
@@ -336,13 +346,15 @@ transformers to make debugging much easier.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-dumpToLog">dumpToLog</a></span></span><span data-ice="signature">(stateAccessor: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-dumpWhen">dumpWhen</a></span></span><span data-ice="signature">(testFn: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span>, callbackFn: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>dumpWhen - adds a test function to the stack that will run whenever
+new state is added to the stack.</p>
+</div>
       </div>
     </td>
     <td>
@@ -361,13 +373,14 @@ transformers to make debugging much easier.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-dumpWhen">dumpWhen</a></span></span><span data-ice="signature">(testFn: <span>*</span>, dumpFn: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-pushAction">pushAction</a></span></span><span data-ice="signature">(fnName: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, args: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>pushAction - Adds an action to the stack.</p>
+</div>
       </div>
     </td>
     <td>
@@ -386,13 +399,14 @@ transformers to make debugging much easier.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-pushAction">pushAction</a></span></span><span data-ice="signature">(fn: <span>*</span>, args: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-pushLog">pushLog</a></span></span><span data-ice="signature">(text: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>pushLog - Adds a text log to the stack.</p>
+</div>
       </div>
     </td>
     <td>
@@ -411,13 +425,14 @@ transformers to make debugging much easier.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-pushLog">pushLog</a></span></span><span data-ice="signature">(text: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-pushState">pushState</a></span></span><span data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, state: <span>Immutable.Map</span>, streamType: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>pushState - Adds a state Map to the stack.</p>
+</div>
       </div>
     </td>
     <td>
@@ -436,38 +451,14 @@ transformers to make debugging much easier.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-pushState">pushState</a></span></span><span data-ice="signature">(name: <span>*</span>, state: <span>*</span>, streamType: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-pushTransformer">pushTransformer</a></span></span><span data-ice="signature">(fnName: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, args: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/stack.js~Stack.html#instance-method-pushTransformer">pushTransformer</a></span></span><span data-ice="signature">(fn: <span>*</span>, args: <span>*</span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>pushTransformer - Adds a transformer to the stack.</p>
+</div>
       </div>
     </td>
     <td>
@@ -492,18 +483,20 @@ transformers to make debugging much easier.</p>
     
     
     
-    <span data-ice="name">constructor</span><span data-ice="signature">(size: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, debug: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>)</span>
+    <span data-ice="name">constructor</span><span data-ice="signature">(size: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, debug: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>): <span><a href="class/src/stack.js~Stack.html">Stack</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber9">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber22">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>constructor - A stack takes a size for the stack and a boolean to determine
+whether the stack should be enabled on creation.</p>
+</div>
 
   
 
@@ -518,23 +511,34 @@ transformers to make debugging much easier.</p>
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">size</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 20</li></ul></td>
-      <td data-ice="description"></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>= 20     The size of the stack.</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">debug</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: false</li></ul></td>
-      <td data-ice="description"></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>= false description</p>
+</td>
     </tr>
 </tbody>
   </table>
 </div>
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="class/src/stack.js~Stack.html">Stack</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>description</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -563,7 +567,7 @@ transformers to make debugging much easier.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber11">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber24">source</a></span></span>
     </span>
   </h3>
 
@@ -603,7 +607,7 @@ transformers to make debugging much easier.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber45">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber107">source</a></span></span>
     </span>
   </h3>
 
@@ -639,18 +643,19 @@ transformers to make debugging much easier.</p>
     <span class="kind" data-ice="kind">set</span>
     
     
-    <span data-ice="name">size</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">size</span><span data-ice="signature">(newSize: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>): <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber71">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber147">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>set size - sets the size of the stack.</p>
+</div>
 
   
 
@@ -679,25 +684,37 @@ transformers to make debugging much easier.</p>
     <span class="kind" data-ice="kind">get</span>
     
     
-    <span data-ice="name">size</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">size</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber75">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber156">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>get size - getter for returning the current size of the stack.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>returns size of the stack</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -723,7 +740,7 @@ transformers to make debugging much easier.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber10">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber23">source</a></span></span>
     </span>
   </h3>
 
@@ -763,7 +780,7 @@ transformers to make debugging much easier.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber44">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber106">source</a></span></span>
     </span>
   </h3>
 
@@ -796,80 +813,25 @@ transformers to make debugging much easier.</p>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-addToStack">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">addToStack</span><span data-ice="signature">(item: <span>*</span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber14">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">item</td>
-      <td data-ice="type"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-dump">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">dump</span><span data-ice="signature">(): <span>*</span></span>
+    <span data-ice="name">dump</span><span data-ice="signature">(): <span>Immutable.List</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber39">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber91">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>dump - Returns the stack, removing any undefined items.</p>
+</div>
 
   
 
@@ -880,8 +842,9 @@ transformers to make debugging much easier.</p>
     <h4>Return:</h4>
     <table>
       <tr>
-        <td class="return-type" data-ice="returnType"><span>*</span></td>
-        
+        <td class="return-type" data-ice="returnType"><span>Immutable.List</span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>the stack.</p>
+</td>
       </tr>
     </table>
     <div data-ice="returnProperties">
@@ -908,18 +871,22 @@ transformers to make debugging much easier.</p>
     
     
     
-    <span data-ice="name">dumpToLog</span><span data-ice="signature">(stateAccessor: <span>*</span>)</span>
+    <span data-ice="name">dumpToLog</span><span data-ice="signature">(stateAccessor: <span>array</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber48">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber118">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>dumpToLog - When dumpToLog is called, it logs out the current stack to
+the console, formatting the different types of items in the stack for
+clarity. It takes an optional array for only logging a particular
+part of the state objects.</p>
+</div>
 
   
 
@@ -933,9 +900,10 @@ transformers to make debugging much easier.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">stateAccessor</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span>array</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>takes an array of strings for logging only a certain part of the state</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -964,18 +932,23 @@ transformers to make debugging much easier.</p>
     
     
     
-    <span data-ice="name">dumpWhen</span><span data-ice="signature">(testFn: <span>*</span>, dumpFn: <span>*</span>)</span>
+    <span data-ice="name">dumpWhen</span><span data-ice="signature">(testFn: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span>, callbackFn: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber43">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber105">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>dumpWhen - adds a test function to the stack that will run whenever
+new state is added to the stack. The test function takes the state
+as an argument and returns a boolean. If the test function returns
+true, it will then run the callback function, passing the current
+stack as an argument.</p>
+</div>
 
   
 
@@ -989,15 +962,17 @@ transformers to make debugging much easier.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">testFn</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>takes state as an argument and returns a boolean.</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">dumpFn</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="name" data-depth="0">callbackFn</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>takes the current stack as an argument</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1026,18 +1001,19 @@ transformers to make debugging much easier.</p>
     
     
     
-    <span data-ice="name">pushAction</span><span data-ice="signature">(fn: <span>*</span>, args: <span>*</span>)</span>
+    <span data-ice="name">pushAction</span><span data-ice="signature">(fnName: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, args: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber20">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber47">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>pushAction - Adds an action to the stack.</p>
+</div>
 
   
 
@@ -1050,16 +1026,18 @@ transformers to make debugging much easier.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">fn</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="name" data-depth="0">fnName</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Name of the action called.</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">args</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Arguments to the action called.</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1088,18 +1066,19 @@ transformers to make debugging much easier.</p>
     
     
     
-    <span data-ice="name">pushLog</span><span data-ice="signature">(text: <span>*</span>)</span>
+    <span data-ice="name">pushLog</span><span data-ice="signature">(text: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber35">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber82">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>pushLog - Adds a text log to the stack.</p>
+</div>
 
   
 
@@ -1113,9 +1092,10 @@ transformers to make debugging much easier.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">text</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The text to be added to the stack.</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1144,18 +1124,19 @@ transformers to make debugging much easier.</p>
     
     
     
-    <span data-ice="name">pushState</span><span data-ice="signature">(name: <span>*</span>, state: <span>*</span>, streamType: <span>*</span>)</span>
+    <span data-ice="name">pushState</span><span data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, state: <span>Immutable.Map</span>, streamType: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber59">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>pushState - Adds a state Map to the stack.</p>
+</div>
 
   
 
@@ -1169,21 +1150,24 @@ transformers to make debugging much easier.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">name</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Name of the stream that&apos;s adding state</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">state</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span>Immutable.Map</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The state object to add to the stack.</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">streamType</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The type of stream (View, Funnel, Stream) adding the state.</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1212,18 +1196,19 @@ transformers to make debugging much easier.</p>
     
     
     
-    <span data-ice="name">pushTransformer</span><span data-ice="signature">(fn: <span>*</span>, args: <span>*</span>)</span>
+    <span data-ice="name">pushTransformer</span><span data-ice="signature">(fnName: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, args: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber31">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stack.js.html#lineNumber73">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>pushTransformer - Adds a transformer to the stack.</p>
+</div>
 
   
 
@@ -1236,16 +1221,18 @@ transformers to make debugging much easier.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">fn</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="name" data-depth="0">fnName</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Name of the transformer called.</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">args</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Arguments to the transformer called.</p>
+</td>
     </tr>
 </tbody>
   </table>

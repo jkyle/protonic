@@ -65,6 +65,7 @@ class Stream {
 
     this._state = initialState;
     this.observers = Immutable.List();
+    this.type = &apos;SOURCE&apos;;
   }
 
 
@@ -129,6 +130,10 @@ class Stream {
     if(!Immutable.is(this._state, newState)){
       this.sendState(newState);
     }
+  }
+
+  forceState (state) {
+    this._state = state;
   }
 
   /**
