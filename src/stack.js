@@ -16,11 +16,20 @@ class Stack {
    *
    * @access public
    * @param  {number} size = 20     The size of the stack.
-   * @param  {boolean} debug = false description
-   * @return {Stack}               description
+   * @param  {boolean} debug = false
+   * @return {Stack}               
    */
   constructor (size = 20, debug = false) {
+
+
+    /**
+     * @access private
+     */
     this.stack = Immutable.List().setSize(size);
+
+    /**
+     * @access public
+     */
     this.debug = debug;
   }
 
@@ -158,4 +167,5 @@ class Stack {
   }
 }
 
+/** @ignore Export the Stack class. */
 export default Stack;

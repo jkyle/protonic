@@ -58,7 +58,7 @@
   
   
   
-  
+  <div class="flat-list" data-ice="directSubclass"><h4>Direct Subclass:</h4><div><span><a href="class/src/funnel.js~Funnel.html">Funnel</a></span>, <span><a href="class/src/view.js~View.html">View</a></span></div></div>
   
   
   
@@ -124,81 +124,6 @@ encouraged.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/stream.js~Stream.html#instance-member-name">name</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/stream.js~Stream.html#instance-member-observers">observers</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/stream.js~Stream.html#instance-member-stack">stack</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -232,7 +157,7 @@ encouraged.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stream.js~Stream.html#instance-set-state">state</a></span></span><span data-ice="signature">(newState: <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span>): <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span>: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/stream.js~Stream.html#instance-set-state">state</a></span></span><span data-ice="signature">(newState: <span>type</span>): <span>type</span>: <span>*</span></span>
         </p>
       </div>
       <div>
@@ -247,31 +172,6 @@ stream.state = newState</code>
 <p>Like I said, maybe too clever, but I thinks allow for a more delarative style when
 writing transformers.</p>
 </div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/stream.js~Stream.html#instance-member-type">type</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
       </div>
     </td>
     <td>
@@ -297,13 +197,14 @@ writing transformers.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stream.js~Stream.html#instance-method-forceState">forceState</a></span></span><span data-ice="signature">(state: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/stream.js~Stream.html#instance-method-forceState">forceState</a></span></span><span data-ice="signature">(state: <span>Immutable.Map</span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>forceState - called when hydrating state from another source.</p>
+</div>
       </div>
     </td>
     <td>
@@ -322,13 +223,14 @@ writing transformers.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/stream.js~Stream.html#instance-method-logStack">logStack</a></span></span><span data-ice="signature">(name: <span>*</span>, stack: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/stream.js~Stream.html#instance-method-logStack">logStack</a></span></span><span data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, stack: <span><a href="class/src/stack.js~Stack.html">Stack</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>logStack - Adds a stack to automatically add state changes.</p>
+</div>
       </div>
     </td>
     <td>
@@ -475,126 +377,6 @@ encouraged. If an initial state is passed in, it should be an Immutable data str
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-name">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">name</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber30">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-observers">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">observers</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber24">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-stack">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">stack</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber31">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-state">
     <span class="access" data-ice="access">public</span>
     
@@ -605,7 +387,7 @@ encouraged. If an initial state is passed in, it should be an Immutable data str
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber102">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber133">source</a></span></span>
     </span>
   </h3>
 
@@ -653,11 +435,11 @@ encouraged. If an initial state is passed in, it should be an Immutable data str
     <span class="kind" data-ice="kind">set</span>
     
     
-    <span data-ice="name">state</span><span data-ice="signature">(newState: <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span>): <span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span>: <span>*</span></span>
+    <span data-ice="name">state</span><span data-ice="signature">(newState: <span>type</span>): <span>type</span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber123">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber154">source</a></span></span>
     </span>
   </h3>
 
@@ -683,7 +465,7 @@ writing transformers.</p>
     <h4>Return:</h4>
     <table>
       <tr>
-        <td class="return-type" data-ice="returnType"><span><a href="class/src/funnel.js~Funnel.html#instance-member-type">type</a></span></td>
+        <td class="return-type" data-ice="returnType"><span>type</span></td>
         <td class="return-desc" data-ice="returnDescription"><p>description</p>
 </td>
       </tr>
@@ -691,46 +473,6 @@ writing transformers.</p>
     <div data-ice="returnProperties">
 </div>
   </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-type">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">type</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber25">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
 
   
 
@@ -755,18 +497,19 @@ writing transformers.</p>
     
     
     
-    <span data-ice="name">forceState</span><span data-ice="signature">(state: <span>*</span>)</span>
+    <span data-ice="name">forceState</span><span data-ice="signature">(state: <span>Immutable.Map</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber92">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber123">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>forceState - called when hydrating state from another source.</p>
+</div>
 
   
 
@@ -780,9 +523,10 @@ writing transformers.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">state</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span>Immutable.Map</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>new state.</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -811,18 +555,19 @@ writing transformers.</p>
     
     
     
-    <span data-ice="name">logStack</span><span data-ice="signature">(name: <span>*</span>, stack: <span>*</span>)</span>
+    <span data-ice="name">logStack</span><span data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, stack: <span><a href="class/src/stack.js~Stack.html">Stack</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber29">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber46">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>logStack - Adds a stack to automatically add state changes.</p>
+</div>
 
   
 
@@ -836,15 +581,17 @@ writing transformers.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">name</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The name of this stream to be viewed in stack logs.</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">stack</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="class/src/stack.js~Stack.html">Stack</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The stack to add state to.</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -877,7 +624,7 @@ writing transformers.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber86">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber111">source</a></span></span>
     </span>
   </h3>
 
@@ -936,7 +683,7 @@ all the observers, by extension).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber49">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/stream.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 

@@ -4,7 +4,7 @@ import Stream from './stream';
 /**
  * A Funnel is a special type of Stream that combines the states from feeder
  * streams.
- * @extends Stream
+ * @extends {Stream}
  */
 class Funnel extends Stream {
 
@@ -29,9 +29,24 @@ class Funnel extends Stream {
     }
     super(Immutable.Map());
 
+    /**
+     * @access private
+     */
     this.primed = false;
+
+    /**
+     * @access private
+     */
     this.sourceMap = sourceMap;
+
+    /**
+     * @access private
+     */
     this.sourceKeys = sourceMap.keySeq();
+
+    /**
+     * @access private
+     */
     this.subscribers = sourceMap.map((sourceStream, key) => {
       if(sourceStream.type === 'VIEW') {
           throw new Error('Funnels cannot subscribe to Views. At key ' + key);
@@ -41,16 +56,22 @@ class Funnel extends Stream {
         this.state = this.state.set(key, newState);
       });
     });
+
+    /**
+     * @access private
+     * @override
+     */
     this.type = 'FUNNEL';
   }
 
   /**
-   * sendState - overwrites Stream's `sendState` by enforcing that all feeder streams have
+   * sendState - overrides Stream's `sendState` by enforcing that all feeder streams have
    * sent state before sending state on to observers. Once a Funnel is `primed` it will pass
    * state on, regardless if one stream sends `undefined`.
    *
    * @access private
    * @param  {Immutable} newState - new state (received internally from Stream's `next` method)
+   * @override
    */
   sendState (newState) {
     if(this.primed){
@@ -70,10 +91,14 @@ class Funnel extends Stream {
    * Funnels should not emit state to subscribers until all source
    * streams have defined state.
    *
-   * @param  {type} observer description
-   * @return {type}          description
+   * @param  {function} observer the obeserver function to listen to state changes.
+   * @return {object}          a subscriber object
    */
   subscribe (observer) {
+
+    /**
+     * @ignore    
+     */
     this.observers = this.observers.push(observer);
     if(this.primed) { observer(this._state); }
     return {
@@ -94,8 +119,8 @@ class Funnel extends Stream {
    * restoring state.
    *
    * @access public
-   * @param  {type} state description
-   * @return {type}       description
+   * @param  {Immutable} state The new state to hydrate the funnel.
+   * @override
    */
   forceState (state) {
     this.sourceMap.forEach((sourceStream, key) => {
@@ -114,4 +139,5 @@ class Funnel extends Stream {
 
 }
 
+/** @ignore Export the Funnel class. */
 export default Funnel;

@@ -20,14 +20,39 @@ class Stream {
       throw new TypeError('initialState must be immutable');
     }
 
+    /**
+     * @access private
+     */
     this._state = initialState;
+
+    /**
+     * @access private
+     */
     this.observers = Immutable.List();
+
+    /**
+     * @access private
+     */
     this.type = 'SOURCE';
   }
 
 
+  /**
+   * logStack - Adds a stack to automatically add state changes.
+   *
+   * @param  {string} name  The name of this stream to be viewed in stack logs.
+   * @param  {Stack} stack The stack to add state to.
+   */
   logStack (name, stack) {
+
+    /**
+     * @access private
+     */
     this.name = name;
+
+    /**
+     * @access private
+     */
     this.stack = stack;
   }
   /**
@@ -89,6 +114,12 @@ class Stream {
     }
   }
 
+  /**
+   * forceState - called when hydrating state from another source.
+   *
+   * @access public
+   * @param  {Immutable.Map} state new state.
+   */
   forceState (state) {
     this._state = state;
   }
@@ -125,4 +156,5 @@ class Stream {
   }
 }
 
+/** @ignore export the Stream class */
 export default Stream;

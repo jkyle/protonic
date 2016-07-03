@@ -6,7 +6,7 @@ import Stream from './stream';
  * only emit state to subscribers if the new return value is distinct from the
  * previous value.
  *
- * @extends Stream
+ * @extends {Stream}
  */
 class View extends Stream {
 
@@ -31,8 +31,19 @@ class View extends Stream {
 
     super();
 
+    /**
+     * @access private
+     */
     this.source = source;
+
+    /**
+     * @access private
+     */
     this.sourceSubscriber = source.subscribe( state => this.next(viewFn(state)) );
+
+    /**
+     * @access private;
+     */
     this.type = 'VIEW';
   }
 
@@ -40,7 +51,7 @@ class View extends Stream {
    * forceState - Overrides the base Stream class's forceState.
    * A View cannot receive new state through forceState.
    * @access private
-   * @return {type}  description
+   * @override
    */
   forceState () {
     throw new Error('Cannot force state on a View.')
@@ -50,11 +61,11 @@ class View extends Stream {
    * destroy - Clean up subscriptions.
    *
    * @access public
-   * @return {type}  description
    */
   destroy () {
     this.sourceSubscriber.unsubscribe();
   }
 }
 
+/** @ignore Export the View class. */
 export default View;
