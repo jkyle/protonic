@@ -127,9 +127,11 @@ class Funnel extends Stream {
    * @override
    */
   forceState (state) {
+    this._state = state;
     this.sourceMap.forEach((sourceStream, key) => {
       sourceStream.forceState(state.get(key));
     });
+    this.sendState(state);
   }
 
   /**

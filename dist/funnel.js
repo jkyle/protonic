@@ -174,9 +174,11 @@ var Funnel = function (_Stream) {
   }, {
     key: 'forceState',
     value: function forceState(state) {
+      this._state = state;
       this.sourceMap.forEach(function (sourceStream, key) {
         sourceStream.forceState(state.get(key));
       });
+      this.sendState(state);
     }
 
     /**
