@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../">
+  <title data-ice="title">Utility Streams</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container manual-root" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/jkyle/protonic.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div class="manual-toc-root">
+  
+<div data-ice="manual" data-toc-name="overview">
+    <h1 class="manual-toc-title"><a href="manual/overview.html" data-ice="title">Overview</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/overview.html#protonic" data-ice="link">PROTONIC</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/overview.html#overview" data-ice="link">Overview</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="getting started">
+    <h1 class="manual-toc-title"><a href="manual/getting started.html" data-ice="title">Getting Started</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/getting started.html#getting-started-quickly-" data-ice="link">Getting Started (Quickly)</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="data flow">
+    <h1 class="manual-toc-title"><a href="manual/data flow.html" data-ice="title">Data Flow</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/data flow.html#one-way-data-flow" data-ice="link">One-Way Data Flow</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/data flow.html#terminology" data-ice="link">Terminology</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/data flow.html#state" data-ice="link">State</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/data flow.html#streams" data-ice="link">Streams</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/data flow.html#transformers" data-ice="link">Transformers</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/data flow.html#actions" data-ice="link">Actions</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="example components">
+    <h1 class="manual-toc-title"><a href="manual/example components.html" data-ice="title">Example Components</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/example components.html#wiring-up-ui-components" data-ice="link">Wiring Up UI Components</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/example components.html#example-components" data-ice="link">Example components</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/example components.html#angular-1-5" data-ice="link">Angular 1.5</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/example components.html#react" data-ice="link">React</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="utility streams">
+    <h1 class="manual-toc-title"><a href="manual/utility streams.html" data-ice="title">Utility Streams</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/utility streams.html#funnels" data-ice="link">Funnels</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/utility streams.html#funnel-api" data-ice="link">Funnel API</a></li>
+<li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/utility streams.html#views" data-ice="link">Views</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/utility streams.html#view-api" data-ice="link">View API</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="reference">
+    <h1 class="manual-toc-title"><a href="identifiers.html" data-ice="title">Reference</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="identifiers.html#class" data-ice="link">Class</a></li>
+</ul>
+  </div>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div class="github-markdown">
+  <div class="manual-breadcrumb-list">
+    <a href="./manual/./index.html">Manual</a>
+    <span>&#xBB;</span>
+    <span data-ice="title">Utility Streams</span>
+  </div>
+  <div data-ice="content"><h2 id="funnels">Funnels</h2>
+<p>A <strong>Funnel</strong> is just a special kind of stream that takes <em>other</em> streams as its input. The funnel will combine the state from the other streams into a new state object. The Protonic Pattern is a big believer that there should only be one source of state for UI components to subscribe to. Typically an AppState will be created by <strong>Funnel</strong>-ing the individual source streams into one state object.</p>
+<p>Funnels initialize with an empty <code>Immutable.Map</code> as its value, but won&apos;t emit state to observers until <em>all</em> of the source streams have sent state to the Funnel.</p>
+<h3 id="funnel-api">Funnel API</h3>
+<p>A funnel is created with <code>new Funnel()</code> and takes a required argument which is a map of streams to combine into one state object. The key for each stream in the map will end up corresponding to the key for that stream&apos;s part of the state in the combined state object.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Funnel } from &apos;protonic&apos;;
+import pilotStream from &apos;path/to/pilot-stream&apos;;
+import shipStream from &apos;path/to/ship-stream&apos;;
+
+let AppStream = new Funnel(Immutable.Map({
+  Pilots: pilotStream,
+  Ships: shipStream
+}))</code>
+</code></pre>
+<p>Just like with Streams, you can get the current state of the Funnel with the <code>.state</code> property.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">let currentState = AppStream.state;
+// currentState is Immutable.Map of
+// { Pilot: { name: &apos;Testor&apos; },
+//   Ship: { type: &apos;X-Wing&apos; } }</code>
+</code></pre>
+<p>Also like Streams, you can subscribe to state changes with the <code>.subscribe</code> method. Note that state will not be sent to observers until all of the source streams have emitted state to the funnel.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">let subscriber = AppStream.subscribe(state =&gt; console.log(state));
+// logs out state anytime state changes.
+
+// later on
+subscriber.unsubscribe();</code>
+</code></pre>
+<p>Finally, when you are done with a Funnel, you can call <code>.destroy</code> method to clean up the Funnel and unsubscribe from the source streams.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">AppStream.destroy()</code>
+</code></pre>
+<h2 id="views">Views</h2>
+<p>A <strong>View</strong> is another special kind of stream that takes a single stream as input along with a function that computes new state from the state of the source stream.</p>
+<p>Since streams only emit new state to observers when the new state is distinct from the current state, views will only emit when the computed state changes. This is a good way to prevent a lot of unnecessary calls to observers when the application state changes.</p>
+<h3 id="view-api">View API</h3>
+<p>A View is created with <code>new View(soureStream, viewFunction)</code>, and requires a source stream which it will subscribe to and a view function to change the shape of the state before emitting to its own subscribers.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { View } from &apos;protonic&apos;;
+import AppStream from &apos;path/to/app-stream&apos;;
+
+let myView = new View(AppStream, state =&gt; {
+  let pilotName = state.getIn([&apos;Pilot&apos;, &apos;name&apos;]);
+  let shipType = state.getIn([&apos;Ship&apos;, &apos;type&apos;]);
+  return Immutable.Map({
+    description: pilotName + &apos; flies an &apos; + shipType
+  });
+})</code>
+</code></pre>
+</div>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
