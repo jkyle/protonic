@@ -1,4 +1,11 @@
 {
     "source": "src",
-    "destination": "docs"
+    "destination": "docs",
+    "manual": {
+      "asset": "./manual/asset",
+      "Overview": ["./manual/1-overview.md"],
+      "Getting Started": ["./manual/2-getting-started.md"],
+      "Data Flow": ["./manual/3-data-flow.md"],
+      "Example Components": ["./manual/4-example-components.md"]
+    }
 }

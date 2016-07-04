@@ -1,6 +1,6 @@
 ## One-Way Data Flow
 
-![Diagram of whole system](./diagrams/all-diagram.png)
+![Diagram of whole system](./asset/all-diagram.png)
 
 ### Terminology
 
@@ -18,14 +18,14 @@ A **Stream** is a canonical source of **state** for a part of an application. Ob
 5. Streams make their internal state available without needing to subscribe to the stream.
 6. Streams only work with immutable data.
 
-![Diagram of Streams](./diagrams/stream-diagram.png)
+![Diagram of Streams](./asset/stream-diagram.png)
 
 #### Transformers
 A **transformer** is a function that gets the current state of a stream, transforms the state into new state, and sends the new state back to the stream.
 
 A transformer is *only* allowed to operate on state from one stream. It may not affect state outside of itself. Additionally, *Only* transformers are allowed to change the state of stream.
 
-![Diagram of Transformers](./diagrams/transformer-diagram.png)
+![Diagram of Transformers](./asset/transformer-diagram.png)
 
 
 #### Actions
@@ -33,4 +33,4 @@ Since transformers are each allowed to only transform state from one stream, and
 
 Actions are allowed to call transformers for different streams, but actions may not manipulate streams directly. Since transformers are not technically reducers (they don't receive state as an argument or return state), they cannot be batched together in on atomic state change. This means that a transform of state from one stream should not depend on a transform of state from another stream happening in a particular order.
 
-![Diagram of Actions](./diagrams/action-diagram.png)
+![Diagram of Actions](./asset/action-diagram.png)

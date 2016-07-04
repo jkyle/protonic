@@ -20,7 +20,7 @@
     "babel-core": "^6.9.1",
     "babel-preset-es2015": "^6.9.0",
     "babel-watch": "^2.0.2",
-    "esdoc": "^0.4.7",
+    "esdoc": "file:///Users/jkyle/projects/esdoc",
     "jasmine": "^2.4.1"
   },
   "dependencies": {

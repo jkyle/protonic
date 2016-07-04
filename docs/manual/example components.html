@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../">
+  <title data-ice="title">Example Components</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container manual-root" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/jkyle/protonic.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div class="manual-toc-root">
+  
+<div data-ice="manual" data-toc-name="overview">
+    <h1 class="manual-toc-title"><a href="manual/overview.html" data-ice="title">Overview</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/overview.html#protonic" data-ice="link">PROTONIC</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/overview.html#overview" data-ice="link">Overview</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="getting started">
+    <h1 class="manual-toc-title"><a href="manual/getting started.html" data-ice="title">Getting Started</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/getting started.html#getting-started-quickly-" data-ice="link">Getting Started (Quickly)</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="data flow">
+    <h1 class="manual-toc-title"><a href="manual/data flow.html" data-ice="title">Data Flow</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/data flow.html#one-way-data-flow" data-ice="link">One-Way Data Flow</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/data flow.html#terminology" data-ice="link">Terminology</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/data flow.html#state" data-ice="link">State</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/data flow.html#streams" data-ice="link">Streams</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/data flow.html#transformers" data-ice="link">Transformers</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/data flow.html#actions" data-ice="link">Actions</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="example components">
+    <h1 class="manual-toc-title"><a href="manual/example components.html" data-ice="title">Example Components</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/example components.html#wiring-up-ui-components" data-ice="link">Wiring Up UI Components</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/example components.html#example-components" data-ice="link">Example components</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/example components.html#angular-1-5" data-ice="link">Angular 1.5</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/example components.html#react" data-ice="link">React</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="reference">
+    <h1 class="manual-toc-title"><a href="identifiers.html" data-ice="title">Reference</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="identifiers.html#class" data-ice="link">Class</a></li>
+</ul>
+  </div>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div class="github-markdown">
+  <div class="manual-breadcrumb-list">
+    <a href="./manual/./index.html">Manual</a>
+    <span>&#xBB;</span>
+    <span data-ice="title">Example Components</span>
+  </div>
+  <div data-ice="content"><h3 id="wiring-up-ui-components">Wiring Up UI Components</h3>
+<p>Since the Protonic Pattern is framework agnostic, the specific implementation details will be determined by whichever framework is rendering your interface. (It&apos;s also important to note that the pattern isn&apos;t limited to an interface being a <em>UI</em> interface.)</p>
+<h4 id="example-components">Example components</h4>
+<p>We&apos;ll demonstrate an oversimplified example of components in both Angular (1.5, but the concept applies as well to 2.0) and React. In both cases, we&apos;ll assume that a stream called <code>AppStream</code> will send the following state:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">Immutable.Map({
+  id: 3,
+  name: &apos;Jessika Pava&apos;,
+  callsign: &apos;Blue Three&apos;,
+  fighter: &apos;T-70 X-Wing&apos;,
+  affiliation: &apos;Resistance&apos;,
+  sorties: 18
+})</code>
+</code></pre>
+<h4 id="angular-1-5">Angular 1.5</h4>
+<p><em>In an effort to reduce complexity, we aren&apos;t using Angular&apos;s Dependency Injection here. If you need DI, you can create a service as a wrapper around the stream. Additionally, changes in state won&apos;t automatically trigger a digest cycle. An example of how to do with will be provided later on.</em></p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+import AppStream from &apos;path/to/app-stream&apos;;
+import { incrementPilotSortie } from &apos;path/to/actions&apos;;
+
+export default {
+  template: &apos;... some template ...&apos;,
+  bindings: {},
+  controller: function(){
+    let subscriber;
+    // Initial state.
+    this.pilot = {
+      name: &apos;&apos;,
+      callsign: &apos;&apos;
+      fighter: &apos;&apos;,
+      affiliation: &apos;&apos;,
+      sorties: 0
+    };
+
+    // Lifecycle methods.
+    // $onInit sets up the state subscriber.
+    this.$onInit = function () {
+      subscriber = AppStream.subscribe(state =&gt; this.pilot = state.toJS())
+    }
+
+    // $onDestroy cleans up the subscriber
+    this.$onDestroy = () =&gt; {
+      subscriber.unsubscribe()
+    }
+
+    // A method to be called from the UI
+    // which in turn calls an action.
+    this.incrementSortie = () =&gt; {
+      incrementPilotSortie(this.pilot.id);
+    }
+  }
+}</code>
+</code></pre>
+<h4 id="react">React</h4>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import AppStream from &apos;path/to/app-stream&apos;;
+import { incrementPilotSortie } from &apos;path/to/actions&apos;;
+
+export default React.createClass({
+  getInitialState: function() {
+    return { pilot:{
+              name: &apos;&apos;,
+              callsign: &apos;&apos;
+              fighter: &apos;&apos;,
+              affiliation: &apos;&apos;,
+              sorties: 0
+            }
+          }
+  },
+  componentDidMount: function() {
+    this.subscriber = AppStream.subscribe(state =&gt; this.setState({ pilot: state.toJS() }));
+  },
+  componentWillUnmount: function() {
+    this.subscriber.unsubscribe();
+  },
+  incrementSortie: function() {
+    incrementPilotSortie(this.state.pilot.id);
+  },
+  render: function() {
+    return ( /*... some jsx  ... */ );
+  }
+})</code>
+</code></pre>
+</div>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

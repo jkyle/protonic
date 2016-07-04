@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../">
+  <title data-ice="title">Data Flow</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container manual-root" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/jkyle/protonic.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div class="manual-toc-root">
+  
+<div data-ice="manual" data-toc-name="overview">
+    <h1 class="manual-toc-title"><a href="manual/overview.html" data-ice="title">Overview</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/overview.html#protonic" data-ice="link">PROTONIC</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/overview.html#overview" data-ice="link">Overview</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="getting started">
+    <h1 class="manual-toc-title"><a href="manual/getting started.html" data-ice="title">Getting Started</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/getting started.html#getting-started-quickly-" data-ice="link">Getting Started (Quickly)</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="data flow">
+    <h1 class="manual-toc-title"><a href="manual/data flow.html" data-ice="title">Data Flow</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/data flow.html#one-way-data-flow" data-ice="link">One-Way Data Flow</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/data flow.html#terminology" data-ice="link">Terminology</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/data flow.html#state" data-ice="link">State</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/data flow.html#streams" data-ice="link">Streams</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/data flow.html#transformers" data-ice="link">Transformers</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/data flow.html#actions" data-ice="link">Actions</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="example components">
+    <h1 class="manual-toc-title"><a href="manual/example components.html" data-ice="title">Example Components</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/example components.html#wiring-up-ui-components" data-ice="link">Wiring Up UI Components</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/example components.html#example-components" data-ice="link">Example components</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/example components.html#angular-1-5" data-ice="link">Angular 1.5</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/example components.html#react" data-ice="link">React</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="reference">
+    <h1 class="manual-toc-title"><a href="identifiers.html" data-ice="title">Reference</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="identifiers.html#class" data-ice="link">Class</a></li>
+</ul>
+  </div>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div class="github-markdown">
+  <div class="manual-breadcrumb-list">
+    <a href="./manual/./index.html">Manual</a>
+    <span>&#xBB;</span>
+    <span data-ice="title">Data Flow</span>
+  </div>
+  <div data-ice="content"><h2 id="one-way-data-flow">One-Way Data Flow</h2>
+<p><img src="./manual/./asset/all-diagram.png" alt="Diagram of whole system"></p>
+<h3 id="terminology">Terminology</h3>
+<h4 id="state">State</h4>
+<p><strong>State</strong> is an <code>Immutable</code> data structure that represents the data needed to render your application. This includes the state of the UI in addition to data that might be retrieved from a database or server.</p>
+<h4 id="streams">Streams</h4>
+<p>A <strong>Stream</strong> is a canonical source of <strong>state</strong> for a part of an application. Observers can subscribe to a stream to receive new state when the stream updates. Streams in Protonic are similar to streams in other frameworks (they are actually very similar to BehaviorSubjects in RxJS), but make certain assumptions to simplify things.</p>
+<ol>
+<li>Streams remember the last state emitted.</li>
+<li>Streams won&apos;t emit falsey values.</li>
+<li>Streams won&apos;t emit a new state if it&apos;s content is the same as the current state of the stream.</li>
+<li>Streams don&apos;t &quot;complete&quot;.</li>
+<li>Streams make their internal state available without needing to subscribe to the stream.</li>
+<li>Streams only work with immutable data.</li>
+</ol>
+<p><img src="./manual/./asset/stream-diagram.png" alt="Diagram of Streams"></p>
+<h4 id="transformers">Transformers</h4>
+<p>A <strong>transformer</strong> is a function that gets the current state of a stream, transforms the state into new state, and sends the new state back to the stream.</p>
+<p>A transformer is <em>only</em> allowed to operate on state from one stream. It may not affect state outside of itself. Additionally, <em>Only</em> transformers are allowed to change the state of stream.</p>
+<p><img src="./manual/./asset/transformer-diagram.png" alt="Diagram of Transformers"></p>
+<h4 id="actions">Actions</h4>
+<p>Since transformers are each allowed to only transform state from one stream, and are not allowed to have side-effects, <strong>actions</strong> are what we use to combine state changes across streams, as well as perform side-effects (such as Ajax request to fetch data from a server).</p>
+<p>Actions are allowed to call transformers for different streams, but actions may not manipulate streams directly. Since transformers are not technically reducers (they don&apos;t receive state as an argument or return state), they cannot be batched together in on atomic state change. This means that a transform of state from one stream should not depend on a transform of state from another stream happening in a particular order.</p>
+<p><img src="./manual/./asset/action-diagram.png" alt="Diagram of Actions"></p>
+</div>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
