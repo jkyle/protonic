@@ -4,9 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /** @module stream */
-
-/** Requires Immutable */
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /** Requires Immutable */
 
 
 var _immutable = require('immutable');
@@ -18,7 +16,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * Class Stream - Base class for Funnels and Views.
+ * A Stream holds the canonical state of a part of an application, and pushes changes to that state
+ * to any observers that are subscribed to the Stream.
  *
  */
 
@@ -39,14 +38,42 @@ var Stream = function () {
       throw new TypeError('initialState must be immutable');
     }
 
+    /**
+     * @access private
+     */
     this._state = initialState;
+
+    /**
+     * @access private
+     */
     this.observers = _immutable2.default.List();
+
+    /**
+     * @access private
+     */
+    this.type = 'SOURCE';
   }
+
+  /**
+   * logStack - Adds a stack to automatically add state changes.
+   *
+   * @param  {string} name  The name of this stream to be viewed in stack logs.
+   * @param  {Stack} stack The stack to add state to.
+   */
+
 
   _createClass(Stream, [{
     key: 'logStack',
     value: function logStack(name, stack) {
+
+      /**
+       * @access private
+       */
       this.name = name;
+
+      /**
+       * @access private
+       */
       this.stack = stack;
     }
     /**
@@ -128,8 +155,22 @@ var Stream = function () {
     }
 
     /**
+     * forceState - called when hydrating state from another source.
+     *
+     * @access public
+     * @param  {Immutable.Map} state new state.
+     */
+
+  }, {
+    key: 'forceState',
+    value: function forceState(state) {
+      this._state = state;
+    }
+
+    /**
      * get state - a getter for returning the current internal state of the Stream.
      *
+     * @access public
      * @return {Immutable} - current state contained by the Stream
      */
 
@@ -152,6 +193,7 @@ var Stream = function () {
      * Like I said, maybe too clever, but I thinks allow for a more delarative style when
      * writing transformers.
      *
+     * @access public
      * @param  {type} newState description
      * @return {type}          description
      */
@@ -163,5 +205,8 @@ var Stream = function () {
 
   return Stream;
 }();
+
+/** @ignore export the Stream class */
+
 
 exports.default = Stream;
