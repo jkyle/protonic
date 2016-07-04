@@ -38,15 +38,15 @@ myStream.state = myStream.state.set('name', 'Karé Kun');
 ```
 
 ## Manual
-[Overview](https://github.com/jkyle/protonic/blob/master/manual/1-overview.md)
+[Overview](https://jkyle.github.io/protonic/manual/overview.html)
 
-[Getting Started](https://github.com/jkyle/protonic/tree/master/manual/2-getting-started.md)
+[Getting Started](https://jkyle.github.io/protonic/manual/getting%20started.html)
 
-[One-Way Data Flow](https://github.com/jkyle/protonic/tree/master/manual/3-data-flow.md)
+[One-Way Data Flow](https://jkyle.github.io/protonic/manual/data%20flow.html)
 
-[Example Components in Angular and React](https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md)
+[Example Components in Angular and React](https://jkyle.github.io/protonic/manual/example%20components.html)
 
-[Other Streams: Funnels and Views](https://github.com/jkyle/protonic/tree/master/manual/4-example-components.md)
+[Other Streams: Funnels and Views](https://jkyle.github.io/protonic/manual/utility%20streams.html)
 
 [Source Documentation](https://jkyle.github.io/protonic)
 
