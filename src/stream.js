@@ -1,6 +1,6 @@
 /** Requires Immutable */
 import Immutable from 'immutable';
-
+import { View } from './index';
 /**
  * A Stream holds the canonical state of a part of an application, and pushes changes to that state
  * to any observers that are subscribed to the Stream.
@@ -122,6 +122,10 @@ class Stream {
    */
   forceState (state) {
     this._state = state;
+  }
+
+  view (viewFn) {
+    return new View(this, viewFn);
   }
 
   /**

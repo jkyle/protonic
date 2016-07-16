@@ -1,0 +1,48 @@
+# Thoughts on Complexibility.
+
+_With great power comes great complexibility._
+
+This document will be an evolving set of ruminations on the topic of Complexity (and a totally made up term: Complexibility) in front-end software systems, as well as a justification for the design patterns in Protonic. Much of the following is inspired by the paper [Out of the Tar Pit (2006, pdf)](http://shaffner.us/cs/papers/tarpit.pdf) by Ben Moseley and Peter Marks. It's a good read.
+
+## Complexity vs. Complexibility
+Complexity can be defined as _the state of having many interconnected parts_. Web applications are systems that are complex to some degree. I'll be talking about complexity in a more specific manner: complexity is evident in how much a developer has to keep in their head at any given time when building or debugging an application. Put another way: How difficult is it to reason about a system?
+
+As applications grow, they will naturally become more complex. I'm not sure that there's a _great_ way to measure complexity, but we can looks at some sources of complexity below to get an idea of how complexity grows with a system. In an ideal situation, complexity will grow 1:1 with the size of an application. I'll define _complexibility_ as the possible rate of growth of complexity as the size of a system grows. A system with high complexibility will not necessarily grow more complex at that rate but has the potential to. I my experience, though, systems will maximize complexity when encountering real-world problems like deadlines.
+
+### To summarize
+**Complexity** How much does a developer has to keep in their head when trying to build or debug a system.
+**Complexibility** How likely is a tool, framework, or application to become complex as the system grows.
+
+## The Problems with Complexity
+Despite complexity being a natural law of systems, complexity (particularly as I'm referring to it here) is a **Bad Thing®**. Many of the reasons should be obvious: Slower development velocity, increased opportunity for bugs to be introduced into the system, and longer times to identify the source of bugs and rectify them. The biggest issue, in my opinion, is how complexity acts as a gatekeeper for who has access to work on a system.  As an application grows complex, the developers who are able to add to or fix bugs in the application are developers who have a considerable amount of experience with the application itself and the toolset used to build the application. Often these are the same developers (sometimes a single developer!) who built the application initially. Bringing on new developers gets to be expensive and time-intensive as the ramp up time to get familiar with the application grows with complexity. Beyond that, the pool of developers is artificially constrained not by who would be a good fit for your team but who has _x_ number of years experience with _y_ toolset or framework.
+
+In summary: Complexity is bad for developers, bad for your team, and bad for the community (_"We want to hire more diverse developers, but it's hard to find candidates who meets our [unnecessarily complex system's] neeeeeeds."_). As mentioned earlier, complexity _will_ grow with the system, so efforts should be made to constrain the growth of complexity by limiting the complexibility of the system.
+
+## Limiting Complexibility
+In order to minimize complexibility, we should identify potential sources of complexity.  For front-end applications, I'll focus on three sources of complexity: **state**, **frameworks and libraries**, and **abstractions and optimizations**.
+
+### State
+Developing and debugging front-end applications is heavily focused on _state_. State represents the information that is presented to the user, as well as the current status of the interface that is presenting the information. By interacting with the interface, a user changes the state: either changing the information or changing the status of the interface (or often both). Bugs will often occur when there is a mismatch between the expectation of the user and the state of the application. (_"I clicked the save button, but the pop up did not close."_)
+
+State is probably the single biggest source of complexity as a system grows. Usually, adding components to a system will naturally add some form of state to the system (the "status" of the component or the information that the component presents). Again, we recognize that complexity will grow as the system grows. The question is in how we minimize the complexibility of the system.
+
+I'll address a couple of different ways that complexibility can rise in relation to how state in managed in an application:
+
+1. when application state is spread out across many components, and
+2. when components are allowed implicitly change the state of the application.
+
+In the first case, the state of the application is managed in chunks across the many components that compose the application. Some components necessarily share some state, but there is no one source of truth for the entire state of the application. Obviously, this has the potential to increase complexity (particularly in terms of how difficult it is to reason about a system) since adding to or debugging an application means first identifying where the relevant state lives, and then wrapping your head around all the components that share the same state.
+
+This leads to the second issue: when components are allowed to implicitly make changes to shared state. _Implicit_ is the key word here. We expect that components be allowed to make changes to the state of an application. An application would be fairly useless if application state was static, or at the very least, unable to respond to user input. The challenge is when changes to the state of one component are made by directly, in a way that is hidden from the component, by another component. As above, this increases complexibility because adding a new components means understanding all the components that could be affected by the new component. Debugging a state issue means understanding all the components that affect the state that is causing the issue. That is to say: as components are added, a developer must not only understand the state of the new component, but also each relationship between the each component that might share state.
+
+With the popularity of React and the rising popularity of Redux, much has been written about the value of one-way data flow as a pattern for state management. I will link to some of those things when I get around to finding the relevant articles. I won't revisit all those arguments here, but to summarize: changes to state that is shared across components cannot happen directly in a component. Instead, a component asks a central service to change the state in a particular way, and once the state has been changed, components may receive a new copy of the state. In this pattern, where and how state changes is far easier to reason about thereby reducing complexibility.
+
+### Frameworks and Libraries
+It's extremely rare for a front-end application to be built with vanilla JavaScript. Most applications nowadays are built around one of the _many_ frameworks (and libraries, however you want to make that distinction) adopted by the community. The choice of the framework and how the framework is implemented by a team can have a significant impact on the complexibility of an application. First because a developer must learn the particulars of the framework (some frameworks have more particulars than others), and second because often times a developer must also understand the internal workings of the framework when trying to debug an issue. Experienced developers (with the chosen framework) may be quicker to solve these kinds of problems, but again, this is a case where complexity is limiting the potential of your team. Even for experienced developers, cycles are being spent on issues unrelated to what an application _should_ be doing.
+
+By and large, I would argue that the more powerful a framework is, the more likely it is to add to complexibility. Powerful in this case can broadly be defined as _"how much can the framework **do**"_. This isn't to advocate that you should avoid frameworks. Rather, when choosing a framework, it's important to keep in mind how the framework will impact the complexibility of your project. How powerful is the framework? How readable is the source code? How many idioms are unique to the framework and have to be learned by developers new to the framework? Which leads us to... 
+
+### Abstractions and Optimizations
+Frameworks are, by definition, abstractions over particular patterns. And, as in our discussion about frameworks, abstractions are a foundational part of front-end application development (and programming, in general). A function that is called from more than one place is an abstraction, and writing code without abstractions would be painful. Abstractions are not themselves **Bad Things®** . However, abstractions contribute to complexity. When working on a system, a developer that comes across an abstraction must now add that abstraction to the list of things in their brain. When new abstractions are introduced into a system, the intent and behavior of the abstractions must be communicated to the team. Since teams aren't always great about communicating and documenting (_deadlines_), abstractions become mysteries that have to be rediscovered and understood by developers (sometimes new developers, sometimes _the same_ developer) when working on the application.
+
+Again, abstractions are not bad. One of the things developers learn early on is **Don't Repeat Yourself**. The idea is that if you have to 

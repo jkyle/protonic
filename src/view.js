@@ -39,12 +39,38 @@ class View extends Stream {
     /**
      * @access private
      */
-    this.sourceSubscriber = source.subscribe( state => this.next(viewFn(state)) );
+    this.sourceSubscriber = source.subscribe( state => {
+      this.next(viewFn(state))
+    });
 
     /**
      * @access private;
      */
     this.type = 'VIEW';
+  }
+
+  /**
+   * subscribe - Overrides the base Stream class's subscribe.
+   * A View can only have one observer.
+   * @access private
+   * @override
+   */
+   subscribe (observer) {
+    this.observers = this.observers.push(observer);
+    if(this._state) { observer(this._state); }
+    return {
+      unsubscribe: () => {
+        const idx = this.observers.indexOf(observer);
+        if (idx >= 0) {
+          this.observers = this.observers.delete(this.observers.indexOf(observer));
+        } else {
+          throw new RangeError('Observer is not subscribed to this stream.');
+        }
+      },
+      destroy: () => {
+        this.destroy()
+      }
+    };
   }
 
   /**
@@ -63,7 +89,12 @@ class View extends Stream {
    * @access public
    */
   destroy () {
-    this.sourceSubscriber.unsubscribe();
+    delete this.observers;
+    if(this.source.type === 'VIEW') {
+      this.source.destroy();
+    } else {
+      this.sourceSubscriber.unsubscribe();
+    }
   }
 }
 

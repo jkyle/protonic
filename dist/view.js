@@ -64,7 +64,7 @@ var View = function (_Stream) {
      * @access private
      */
     _this.sourceSubscriber = source.subscribe(function (state) {
-      return _this.next(viewFn(state));
+      _this.next(viewFn(state));
     });
 
     /**
@@ -75,14 +75,45 @@ var View = function (_Stream) {
   }
 
   /**
-   * forceState - Overrides the base Stream class's forceState.
-   * A View cannot receive new state through forceState.
+   * subscribe - Overrides the base Stream class's subscribe.
+   * A View can only have one observer.
    * @access private
    * @override
    */
 
 
   _createClass(View, [{
+    key: 'subscribe',
+    value: function subscribe(observer) {
+      var _this2 = this;
+
+      this.observers = this.observers.push(observer);
+      if (this._state) {
+        observer(this._state);
+      }
+      return {
+        unsubscribe: function unsubscribe() {
+          var idx = _this2.observers.indexOf(observer);
+          if (idx >= 0) {
+            _this2.observers = _this2.observers.delete(_this2.observers.indexOf(observer));
+          } else {
+            throw new RangeError('Observer is not subscribed to this stream.');
+          }
+        },
+        destroy: function destroy() {
+          _this2.destroy();
+        }
+      };
+    }
+
+    /**
+     * forceState - Overrides the base Stream class's forceState.
+     * A View cannot receive new state through forceState.
+     * @access private
+     * @override
+     */
+
+  }, {
     key: 'forceState',
     value: function forceState() {
       throw new Error('Cannot force state on a View.');
@@ -97,7 +128,12 @@ var View = function (_Stream) {
   }, {
     key: 'destroy',
     value: function destroy() {
-      this.sourceSubscriber.unsubscribe();
+      delete this.observers;
+      if (this.source.type === 'VIEW') {
+        this.source.destroy();
+      } else {
+        this.sourceSubscriber.unsubscribe();
+      }
     }
   }]);
 

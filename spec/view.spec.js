@@ -62,9 +62,25 @@ describe('View Stream', () => {
       });
     });
 
+    it('should automatically unsubscribe subscribers when destroyed', () => {
+      testView.subscribe(state => state);
+      expect(testView.observers.size).toBe(1);
+      testView.destroy();
+      expect(testView.observers).toBe(undefined);
+    });
+
     it('should unsubscribe from source stream when destroyed', () => {
       testView.destroy();
       expect(testStream.observers.size).toBe(0);
     });
+
+    it('should automatically cascade destruction', () => {
+      let testView2 = new View(testView, state => state);
+      testView2.subscribe(state => state);
+      expect(testView.observers.size).toBe(1);
+      testView2.destroy();
+      expect(testView.observers).toBe(undefined);
+    });
+
   })
 });
