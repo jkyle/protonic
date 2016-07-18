@@ -97,7 +97,9 @@ class Stream {
   sendState (newState) {
       this._state = newState;
       if (this.stack) { this.stack.pushState(this.name, this._state, this.type); }
-      this.observers.forEach(observer => observer(this._state));
+      if (newState) {
+        this.observers.forEach(observer => observer(this._state));
+      }
   }
 
   /**

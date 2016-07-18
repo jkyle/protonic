@@ -134,9 +134,11 @@ var Stream = function () {
       if (this.stack) {
         this.stack.pushState(this.name, this._state, this.type);
       }
-      this.observers.forEach(function (observer) {
-        return observer(_this2._state);
-      });
+      if (newState) {
+        this.observers.forEach(function (observer) {
+          return observer(_this2._state);
+        });
+      }
     }
 
     /**
